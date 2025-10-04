@@ -3,11 +3,11 @@
     <Header />
     <div class="flex flex-col lg:flex-row h-[calc(100vh-1.8rem)]">
       <!-- Planet Display Section -->
-      <div class="w-full lg:w-1/2 h-64 lg:h-full border-b lg:border-b-0 lg:border-r border-zinc-300 border-dashed relative bg-black">
+      <div class="w-full lg:w-1/2 h-64 lg:h-full border-b lg:border-b-0 lg:border-r border-zinc-300 border-dashed relative bg-white">
         <div ref="planetContainer" class="w-full h-full"></div>
-        <div class="absolute top-4 left-4 text-white">
+        <div class="absolute top-4 left-4 text-black">
           <h2 class="text-lg lg:text-xl font-semibold mb-2">{{ exoplanetData?.name || 'Loading...' }}</h2>
-          <p class="text-xs lg:text-sm text-zinc-300">{{ exoplanetData?.type || '' }}</p>
+          <p class="text-xs lg:text-sm text-zinc-600">{{ exoplanetData?.type || '' }}</p>
         </div>
       </div>
       

@@ -66,12 +66,12 @@ export function usePlanetGenerator() {
       lacunarity: 1.8,
       octaves: 10,
       undulation: 0.0,
-      ambientIntensity: 0.02,
-      diffuseIntensity: 1.0,
-      specularIntensity: 2.0,
-      shininess: 10.0,
-      lightDirection: new THREE.Vector3(1, 1, 1).normalize(),
-      lightColor: new THREE.Color(0xffffff),
+       ambientIntensity: 0.3, // Increased ambient light for better visibility
+       diffuseIntensity: 2.5, // Increased diffuse light
+       specularIntensity: 1.5, // Slightly reduced specular to avoid over-brightness
+       shininess: 10.0,
+       lightDirection: new THREE.Vector3(1, 1, 1).normalize(),
+       lightColor: new THREE.Color(0xffffff),
       bumpStrength: 1.0,
       bumpOffset: 0.001,
       // Earth-like colors with slight variations
@@ -192,7 +192,7 @@ export function usePlanetGenerator() {
   // Setup Three.js scene for planet display - optimized for performance
   const setupPlanetScene = (container: HTMLElement, planet: THREE.Mesh) => {
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color(0x000000)
+    scene.background = new THREE.Color(0xffffff)
 
     const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000)
     camera.position.z = 50
@@ -208,6 +208,19 @@ export function usePlanetGenerator() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)) // Cap pixel ratio for performance
     renderer.outputColorSpace = THREE.SRGBColorSpace
     container.appendChild(renderer.domElement)
+
+    // Add additional lighting to the scene
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4) // Soft ambient light
+    scene.add(ambientLight)
+    
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2)
+    directionalLight.position.set(1, 1, 1)
+    scene.add(directionalLight)
+    
+    // Add a second light from the opposite side for better illumination
+    const backLight = new THREE.DirectionalLight(0xffffff, 0.6)
+    backLight.position.set(-1, -1, -1)
+    scene.add(backLight)
 
     scene.add(planet)
 
