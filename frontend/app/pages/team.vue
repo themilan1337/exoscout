@@ -25,7 +25,7 @@
           :speed="0.6" 
           scrambleChars=".:*">
           NASA Space Apps Challenge 2025<br>
-          Team ExoScout
+          Project ExoScout by Synapse team
         </ScrambleText>
         
         <div class="text-center mb-12">
@@ -48,11 +48,11 @@
             </div>
             <div>
               <h3 class="font-medium mb-2 text-zinc-800">Project</h3>
-              <p class="text-zinc-600">ExoScout - Exoplanet Discovery Platform</p>
+              <p class="text-zinc-600">ExoScout - Exoplanet Discovery Platform by Synapse</p>
             </div>
             <div>
               <h3 class="font-medium mb-2 text-zinc-800">Category</h3>
-              <p class="text-zinc-600">Astrophysics & Space Exploration</p>
+              <p class="text-zinc-600">Hunting for Exoplanets with AI</p>
             </div>
             <div>
               <h3 class="font-medium mb-2 text-zinc-800">Duration</h3>
