@@ -61,10 +61,10 @@
           </div>
         </div>
 
-        <div class="mb-12">
+        <div>
           <h2 class="text-2xl font-medium text-center mb-8">Meet Our Team</h2>
-          <div class="grid md:grid-cols-2 gap-6">
-            <div class="border border-dashed border-zinc-300 rounded-lg p-6 hover:bg-zinc-50/50 transition-colors">
+          <div class="grid md:grid-cols-2">
+            <div class="border border-dashed border-r-0 border-zinc-300 p-6 hover:bg-zinc-50/50 transition-colors">
               <img 
                 src="https://media.licdn.com/dms/image/v2/D4E03AQHTYK4oUJmH6w/profile-displayphoto-shrink_400_400/B4EZeayAzcHgAg-/0/1750648492072?e=1762387200&v=beta&t=WvPtyKZLZ72eBbm_iRc84xq6r9QqVFzvMIXmF8W9ehM" 
                 alt="Milan G." 
@@ -75,7 +75,7 @@
               <p class="text-xs text-zinc-500">Full-stack developer passionate about space exploration and data visualization. Specializes in Vue.js, Node.js, and astronomical data processing.</p>
             </div>
 
-            <div class="border border-dashed border-zinc-300 rounded-lg p-6 hover:bg-zinc-50/50 transition-colors">
+            <div class="border border-dashed border-zinc-300 p-6 hover:bg-zinc-50/50 transition-colors">
               <img 
                 src="https://media.licdn.com/dms/image/v2/D4D03AQGsONoaf48xcw/profile-displayphoto-shrink_400_400/B4DZhhQaPSHwAg-/0/1753978350464?e=1762387200&v=beta&t=5ThfLuIv2wT9dIVLFD-5WkqVGIqXUE-ApbDoSBxwlDA" 
                 alt="Bizhan A." 
@@ -88,7 +88,7 @@
           </div>
         </div>
 
-        <div class="border border-dashed border-zinc-300 rounded-lg p-8 mb-12">
+        <div class="border border-dashed border-zinc-300 border-t-0 p-8 mb-12">
           <h2 class="text-2xl font-medium text-center mb-6">Our Mission</h2>
           <div class="max-w-3xl mx-auto text-center">
             <p class="text-zinc-700 leading-relaxed mb-6">
