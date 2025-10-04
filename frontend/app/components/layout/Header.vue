@@ -1,5 +1,8 @@
 <template>
     <div class="flex justify-between items-center p-4">
-        <h1 class="text-2xl font-bold">ExoScout</h1>
+        <Logo fill="#000" />
     </div>
 </template>
+<script setup>
+import Logo from '@/components/Logo.vue'
+</script>
