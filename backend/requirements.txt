@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+httpx
+astroquery
+astropy
+numpy
+pandas
+scikit-learn
+xgboost
+diskcache
+python-dotenv
+joblib
+pydantic

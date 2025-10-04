@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  exoscout-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: exoscout-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - ENV=production
+    volumes:
+      # Persist logs
+      - ./backend/logs:/app/logs
+      # Persist cache
+      - ./backend/cache:/app/cache
+      - ./backend/.cache:/app/.cache
+      # Mount .env file if it exists
+      - ./backend/.env:/app/.env:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - exoscout-network
+
+networks:
+  exoscout-network:
+    driver: bridge
+
+volumes:
+  backend-logs:
+  backend-cache:
