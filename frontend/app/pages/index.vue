@@ -22,9 +22,25 @@
         Discover Exoplanets.<br>
         Your gateway to real data from NASA’s <br> archives—search, filter, and explore <br> worlds beyond our solar <br> system in seconds.
       </ScrambleText>
-      <div class="flex mx-auto justify-center items-center mt-8">
-        <Input placeholder="Enter ID" type="number" variant="secondary" size="sm" class="mr-2" />
-        <Button variant="secondary" size="sm">Find some planets</Button>
+      <div class="flex flex-col sm:flex-row mx-auto justify-center items-center mt-8 gap-2 px-4">
+        <Input 
+          v-model="exoplanetId" 
+          placeholder="Enter ID" 
+          type="number" 
+          variant="secondary" 
+          size="sm" 
+          class="w-full sm:w-auto sm:mr-2"
+          @keyup.enter="searchExoplanet" 
+        />
+        <Button 
+          variant="secondary" 
+          size="sm" 
+          @click="searchExoplanet"
+          :disabled="!exoplanetId || exoplanetId.trim() === ''"
+          class="w-full sm:w-auto"
+        >
+          Find some planets
+        </Button>
       </div>
       <div class="flex mx-auto justify-center gap-x-4 items-center mt-8">
         <NuxtLink to="/team" class="text-zinc-600 text-sm">Our Team<span class="inline-block ml-1">↗</span></NuxtLink>
@@ -34,11 +50,24 @@
   </div>
 </template>
 <script setup lang="ts">
+import { ref } from 'vue'
 import Header from '@/components/layout/Header.vue'
 import ScrambleText from "@/components/ScrambleText.vue";
 import Button from "@/components/ui/Button.vue";
 import Input from "@/components/ui/Input.vue";
 import Particles from "@/components/Particles.vue";
+
+const exoplanetId = ref('')
+
+const searchExoplanet = async () => {
+  if (exoplanetId.value && exoplanetId.value.trim() !== '') {
+    // Navigate to dashboard with the exoplanet ID as a query parameter
+    await navigateTo({
+      path: '/dashboard',
+      query: { id: exoplanetId.value.trim() }
+    })
+  }
+}
 </script>
 <style scoped>
 .particles-container {
