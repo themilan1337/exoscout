@@ -85,18 +85,15 @@
           </div>
           
           <div class="flex gap-4 pt-4">
-            <NuxtLink 
-              to="/" 
-              class="px-4 py-2 bg-zinc-100 text-zinc-700 rounded-lg hover:bg-zinc-200 transition-colors"
+            <Button @click="regeneratePlanet" variant="primary">
+              Regenerate Planet
+            </Button>
+            <Button 
+              variant="secondary"
+              @click="$router.push('/')"
             >
-              ← Search Another
-            </NuxtLink>
-            <button 
-              @click="regeneratePlanet"
-              class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              🔄 Regenerate Planet
-            </button>
+              Search Another
+            </Button>
           </div>
         </div>
         
@@ -114,6 +111,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import Header from '@/components/layout/Header.vue'
+import Button from '@/components/ui/Button.vue'
 import { usePlanetGenerator, type ExoplanetData } from '@/composables/usePlanetGenerator'
 
 const route = useRoute()
