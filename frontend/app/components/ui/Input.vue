@@ -41,7 +41,7 @@ const emit = defineEmits<{
 }>()
 
 const inputClasses = computed(() => {
-  const base = 'block rounded-md border-0 ring-1 ring-zinc-300 ring-inset transition-colors transition-all focus:ring-1 focus:outline-none focus:ring-zinc-600 focus:ring-inset disabled:cursor-not-allowed disabled:opacity-50'
+  const base = 'block rounded-md bg-white border-0 ring-1 ring-zinc-300 ring-inset transition-colors transition-all focus:ring-1 focus:outline-none focus:ring-zinc-600 focus:ring-inset disabled:cursor-not-allowed disabled:opacity-50'
 
   const variants = {
     default: 'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-indigo-600',

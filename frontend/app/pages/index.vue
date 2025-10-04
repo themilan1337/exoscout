@@ -23,8 +23,12 @@
         Your gateway to real data from NASA’s <br> archives—search, filter, and explore <br> worlds beyond our solar <br> system in seconds.
       </ScrambleText>
       <div class="flex mx-auto justify-center items-center mt-8">
-        <Input placeholder="Enter ID" variant="secondary" size="sm" class="mr-2" />
+        <Input placeholder="Enter ID" type="number" variant="secondary" size="sm" class="mr-2" />
         <Button variant="secondary" size="sm">Find some planets</Button>
+      </div>
+      <div class="flex mx-auto justify-center gap-x-4 items-center mt-8">
+        <NuxtLink to="/team" class="text-zinc-600 text-sm">Our Team<span class="inline-block ml-1">↗</span></NuxtLink>
+        <NuxtLink to="https://github.com/themilan1337/exoscout" class="text-zinc-600 text-sm">GitHub<span class="inline-block ml-1 my-auto">↗</span></NuxtLink>
       </div>
     </div>
   </div>
