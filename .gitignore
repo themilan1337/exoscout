@@ -408,3 +408,52 @@ coverage/
 
 # Test artifacts
 test-results/.env
+
+# =============================================================================
+# Backend specific exclusions (ExoScout FastAPI backend)
+# =============================================================================
+
+# Environment & virtualenv
+backend/.env
+backend/venv/
+backend/env/
+backend/.venv/
+
+# Python cache and logs
+backend/__pycache__/
+backend/.cache/
+backend/cache/
+backend/logs/
+*.log
+
+# Model artifacts and training outputs
+backend/ml/
+backend/models/*.pkl
+backend/models/*.joblib
+backend/models/*.h5
+backend/models/*.model
+
+# Data files (datasets, CSVs, etc.)
+backend/*.csv
+backend/*.json
+backend/*.parquet
+backend/*.feather
+backend/*.xlsx
+backend/*.xls
+
+# Compiled binaries or checkpoints
+backend/*.npy
+backend/*.npz
+backend/*.pt
+backend/*.pth
+backend/*.onnx
+
+# Temporary or test outputs
+backend/tmp/
+backend/temp/
+backend/tests.sh
+backend/*.out
+backend/*.tmp
+
+# Local configuration / documentation
+backend/API_DOCUMENTATION.md
