@@ -1,7 +1,7 @@
 <template>
     <div class="flex justify-between items-center border-b border-dashed border-zinc-300">
         <NuxtLink to="/" class="flex cursor-pointer">
-            <NuxtImg src="https://gpm.nasa.gov/sites/default/files/document_files/NASA-Logo-Large.png" alt="NASA Logo" class="my-auto ml-2 h-5 w-6 mr-2" />
+            <NuxtImg src="/nasa.png" alt="NASA Logo" class="my-auto ml-2 h-5 w-6 mr-2" />
             <svg class="size-4 my-auto" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m8.401 16.333l-.734-.727L11.266 12L7.667 8.42l.734-.728L12 11.29l3.574-3.597l.734.727L12.709 12l3.599 3.606l-.734.727L12 12.737z"/></svg>
             <Logo fill="#000" class="my-auto" />
             <h1 class="my-auto border-r border-dashed py-1 border-zinc-300 px-2 text-sm flex items-center">exoscout.vercel.app</h1>
