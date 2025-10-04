@@ -2,7 +2,6 @@
   <div>
     <Header />
     <div class="flex flex-col lg:flex-row h-[calc(100vh-1.8rem)]">
-      <!-- Planet Display Section -->
       <div class="w-full lg:w-1/2 h-64 lg:h-full border-b lg:border-b-0 lg:border-r border-zinc-300 border-dashed relative bg-white">
         <div ref="planetContainer" class="w-full h-full"></div>
         <div class="absolute top-4 left-4 text-black">
@@ -11,7 +10,6 @@
         </div>
       </div>
       
-      <!-- Exoplanet Data Section -->
       <div class="w-full lg:w-1/2 p-4 lg:p-8 overflow-y-auto flex-1">
         <div v-if="exoplanetData" class="space-y-6">
           <div>
@@ -125,10 +123,8 @@ const { generatePlanetParams, generateExoplanetData, createPlanet, setupPlanetSc
 const initializePlanet = () => {
   const searchId = route.query.id as string || '12345'
   
-  // Generate exoplanet data
   exoplanetData.value = generateExoplanetData(searchId)
   
-  // Generate and display planet
   if (planetContainer.value) {
     const planetParams = generatePlanetParams(searchId)
     const planet = createPlanet(planetParams)
@@ -141,7 +137,6 @@ const regeneratePlanet = () => {
     cleanupPlanet()
   }
   
-  // Generate new random ID for regeneration
   const randomId = Math.floor(Math.random() * 999999).toString()
   exoplanetData.value = generateExoplanetData(randomId)
   
@@ -153,7 +148,7 @@ const regeneratePlanet = () => {
 }
 
 onMounted(() => {
-  // Small delay to ensure the container is properly mounted
+  //delay1s
   setTimeout(initializePlanet, 100)
 })
 

@@ -54,9 +54,9 @@ export function usePlanetGenerator() {
     const seed = hashCode(id)
     const random = seededRandom(seed)
     
-    // Base Earth-like parameters with small variations
+    // smth similar to earth
     const baseParams = {
-      type: 2, // Use type 2 which looks most Earth-like
+      type: 2,
       radius: 20.0,
       amplitude: 1.19,
       sharpness: 2.6,
@@ -66,9 +66,9 @@ export function usePlanetGenerator() {
       lacunarity: 1.8,
       octaves: 10,
       undulation: 0.0,
-       ambientIntensity: 0.3, // Increased ambient light for better visibility
-       diffuseIntensity: 2.5, // Increased diffuse light
-       specularIntensity: 1.5, // Slightly reduced specular to avoid over-brightness
+       ambientIntensity: 0.3, //  more lights 
+       diffuseIntensity: 2.5, // difflights increased
+       specularIntensity: 1.5, // reduced specular to avoid overbrightness
        shininess: 10.0,
        lightDirection: new THREE.Vector3(1, 1, 1).normalize(),
        lightColor: new THREE.Color(0xffffff),
@@ -90,10 +90,9 @@ export function usePlanetGenerator() {
       blend45: 0.168
     }
     
-    // Add small variations to make each planet unique but still Earth-like
+    // variations to make each planet unique but still earth like
     return {
       ...baseParams,
-      // Slight variations in terrain
       amplitude: baseParams.amplitude + (random() - 0.5) * 0.3, // ±0.15 variation
       sharpness: baseParams.sharpness + (random() - 0.5) * 0.4, // ±0.2 variation
       period: baseParams.period + (random() - 0.5) * 0.2, // ±0.1 variation
@@ -118,7 +117,7 @@ export function usePlanetGenerator() {
     }
   }
 
-  // Generate mock exoplanet data
+  // mock data with randomness
   const generateExoplanetData = (id: string): ExoplanetData => {
     const seed = hashCode(id)
     const random = seededRandom(seed)
@@ -192,7 +191,7 @@ export function usePlanetGenerator() {
   // Setup Three.js scene for planet display - optimized for performance
   const setupPlanetScene = (container: HTMLElement, planet: THREE.Mesh) => {
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color(0xffffff)
+    scene.background = new THREE.Color(0x000000)
 
     const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000)
     camera.position.z = 50
