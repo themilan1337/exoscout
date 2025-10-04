@@ -92,3 +92,39 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
 2025-10-04 23:26:04,399 - utils.cache - ERROR - Function execution error: 500: Failed to retrieve TESS lightcurve: Failed to get coordinates: NASA TAP query failed: Client error '400 ERROR' for url 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=%0A++++++++++++SELECT+tic_id%2C+ra%2C+dec%2C+pmra%2C+pmdec%2C+plx%2C+gaia_mag%2C+tess_mag%0A++++++++++++FROM+tic+%0A++++++++++++WHERE+tic_id+%3D+307210830%0A++++++++++++&format=json'
 For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-10-04 19:10:42,633 - main - INFO - Starting ExoScout Backend...
+2025-10-04 19:14:28,605 - routers.resolve - INFO - Detected mission: TESS, ID: 1019.01 for target: TOI-1019.01
+2025-10-04 19:14:31,379 - httpx - INFO - HTTP Request: GET https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+%2A+from+toi+where+toi%3D1019.01&format=json "HTTP/1.1 200 OK"
+2025-10-04 19:14:31,472 - services.nasa_api - INFO - NASA TAP query returned 1 results
+2025-10-04 19:14:31,488 - routers.resolve - INFO - Successfully resolved TOI-1019.01 to TESS ID 341420329
+2025-10-04 19:14:31,514 - routers.features - INFO - Fetching features for TESS target 307210830
+2025-10-04 19:14:33,625 - httpx - INFO - HTTP Request: GET https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+%2A+from+toi+where+tid%3D307210830&format=json "HTTP/1.1 200 OK"
+2025-10-04 19:14:33,927 - services.nasa_api - INFO - NASA TAP query returned 3 results
+2025-10-04 19:14:33,929 - routers.features - INFO - Retrieved 76 features for TESS target 307210830
+2025-10-04 19:14:33,955 - routers.lightcurve - INFO - Getting lightcurve for TESS 307210830
+2025-10-04 19:14:36,213 - httpx - INFO - HTTP Request: GET https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=%0A++++++++++++SELECT+tic_id%2C+ra%2C+dec%2C+pmra%2C+pmdec%2C+plx%2C+gaia_mag%2C+tess_mag%0A++++++++++++FROM+tic+%0A++++++++++++WHERE+tic_id+%3D+307210830%0A++++++++++++&format=json "HTTP/1.1 400 ERROR"
+2025-10-04 19:14:36,336 - services.nasa_api - ERROR - NASA TAP query failed: Client error '400 ERROR' for url 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=%0A++++++++++++SELECT+tic_id%2C+ra%2C+dec%2C+pmra%2C+pmdec%2C+plx%2C+gaia_mag%2C+tess_mag%0A++++++++++++FROM+tic+%0A++++++++++++WHERE+tic_id+%3D+307210830%0A++++++++++++&format=json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-10-04 19:14:36,336 - utils.cache - ERROR - Function execution error: NASA TAP query failed: Client error '400 ERROR' for url 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=%0A++++++++++++SELECT+tic_id%2C+ra%2C+dec%2C+pmra%2C+pmdec%2C+plx%2C+gaia_mag%2C+tess_mag%0A++++++++++++FROM+tic+%0A++++++++++++WHERE+tic_id+%3D+307210830%0A++++++++++++&format=json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-10-04 19:14:36,337 - services.nasa_api - ERROR - Error getting coordinates for TESS 307210830: NASA TAP query failed: Client error '400 ERROR' for url 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=%0A++++++++++++SELECT+tic_id%2C+ra%2C+dec%2C+pmra%2C+pmdec%2C+plx%2C+gaia_mag%2C+tess_mag%0A++++++++++++FROM+tic+%0A++++++++++++WHERE+tic_id+%3D+307210830%0A++++++++++++&format=json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-10-04 19:14:36,337 - utils.cache - ERROR - Function execution error: Failed to get coordinates: NASA TAP query failed: Client error '400 ERROR' for url 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=%0A++++++++++++SELECT+tic_id%2C+ra%2C+dec%2C+pmra%2C+pmdec%2C+plx%2C+gaia_mag%2C+tess_mag%0A++++++++++++FROM+tic+%0A++++++++++++WHERE+tic_id+%3D+307210830%0A++++++++++++&format=json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-10-04 19:14:36,337 - routers.lightcurve - ERROR - Failed to get TESS lightcurve for 307210830: Failed to get coordinates: NASA TAP query failed: Client error '400 ERROR' for url 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=%0A++++++++++++SELECT+tic_id%2C+ra%2C+dec%2C+pmra%2C+pmdec%2C+plx%2C+gaia_mag%2C+tess_mag%0A++++++++++++FROM+tic+%0A++++++++++++WHERE+tic_id+%3D+307210830%0A++++++++++++&format=json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-10-04 19:14:36,338 - utils.cache - ERROR - Function execution error: 500: Failed to retrieve TESS lightcurve: Failed to get coordinates: NASA TAP query failed: Client error '400 ERROR' for url 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=%0A++++++++++++SELECT+tic_id%2C+ra%2C+dec%2C+pmra%2C+pmdec%2C+plx%2C+gaia_mag%2C+tess_mag%0A++++++++++++FROM+tic+%0A++++++++++++WHERE+tic_id+%3D+307210830%0A++++++++++++&format=json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-10-04 19:14:36,942 - services.model - INFO - Loaded model for TESS: models/toi_model.calibrated.pkl
+2025-10-04 19:14:36,943 - services.model - INFO - Loaded features for TESS: 10 features
+2025-10-04 19:14:36,944 - services.model - INFO - Loaded threshold for TESS: 0.4
+2025-10-04 19:14:36,944 - routers.predict - INFO - Making prediction for TESS 307210830
+2025-10-04 19:14:36,960 - routers.predict - INFO - Prediction complete for TESS 307210830: CONFIRMED (p=0.9137)
+2025-10-04 19:14:37,016 - services.model - INFO - Loaded model for KEPLER: models/koi_model.calibrated.pkl
+2025-10-04 19:14:37,016 - services.model - INFO - Loaded features for KEPLER: 11 features
+2025-10-04 19:14:37,016 - services.model - INFO - Loaded threshold for KEPLER: 0.4
+2025-10-04 19:14:37,017 - routers.predict - INFO - Making prediction for KEPLER 10666592
+2025-10-04 19:14:39,356 - httpx - INFO - HTTP Request: GET https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+%2A+from+cumulative+where+kepid%3D10666592&format=json "HTTP/1.1 200 OK"
+2025-10-04 19:14:39,384 - services.nasa_api - INFO - NASA TAP query returned 1 results
+2025-10-04 19:14:39,405 - routers.predict - INFO - Prediction complete for KEPLER 10666592: CONFIRMED (p=0.8039)
+2025-10-04 19:15:56,173 - main - INFO - Shutting down ExoScout Backend...
