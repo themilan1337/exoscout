@@ -36,7 +36,7 @@
           </p>
         </div>
 
-        <div class="border border-dashed border-zinc-300 rounded-lg p-6 mb-12 bg-zinc-50/50">
+        <div class="border border-dashed border-zinc-300 p-6 mb-6 bg-zinc-50/50">
           <div class="flex items-center gap-3 mb-4">
             <img src="/nasa.png" alt="NASA Logo" class="h-6 w-7" />
             <h2 class="text-xl font-medium">Challenge Details</h2>
