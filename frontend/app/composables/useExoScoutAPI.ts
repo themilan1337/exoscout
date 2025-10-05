@@ -48,35 +48,7 @@ export interface LightcurveData {
   }
 }
 
-export interface ResolvedTarget {
-  mission: string
-  target: string
-  original_target: string
-  numeric_id: string
-  ra?: number
-  dec?: number
-  metadata: {
-    // TESS/TOI metadata
-    toi?: string
-    tid?: number
-    tfopwg_disp?: string  // Disposition: PC (Planet Candidate), CP (Confirmed Planet), FP (False Positive)
-    pl_orbper?: number
-    pl_rade?: number
-    st_tmag?: number
-    st_teff?: number
-    st_rad?: number
-    // Kepler/KOI metadata
-    kepoi_name?: string
-    kepid?: number
-    koi_disposition?: string  // Disposition: CONFIRMED, CANDIDATE, FALSE POSITIVE
-    koi_period?: number
-    koi_prad?: number
-    koi_kepmag?: number
-    koi_steff?: number
-    koi_srad?: number
-    [key: string]: any
-  }
-}
+
 
 export interface ModelStatus {
   available_missions: string[]
@@ -233,28 +205,6 @@ export const useExoScoutAPI = () => {
     return apiRequest(endpoint)
   }
 
-  // Resolution endpoints
-  const resolveTarget = async (targetName: string): Promise<ResolvedTarget> => {
-    return apiRequest(`/api/${apiVersion}/resolve/${encodeURIComponent(targetName)}`)
-  }
-
-  const bulkResolveTargets = async (
-    targets: string[],
-    includeCoordinates: boolean = true
-  ): Promise<{
-    resolved_count: number
-    failed_count: number
-    results: Record<string, ResolvedTarget>
-  }> => {
-    return apiRequest(`/api/${apiVersion}/resolve/bulk`, {
-      method: 'POST',
-      body: JSON.stringify({
-        targets,
-        include_coordinates: includeCoordinates
-      })
-    })
-  }
-
   // Utility functions
   const clearError = () => {
     error.value = null
@@ -368,8 +318,6 @@ export const useExoScoutAPI = () => {
     getAvailableMissions,
     getFeatures,
     getLightcurve,
-    resolveTarget,
-    bulkResolveTargets,
     
     // Utility methods
     clearError,

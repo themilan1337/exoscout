@@ -71,7 +71,7 @@
                     v-model="targetInput"
                     @keyup.enter="analyzeTarget"
                     type="text"
-                    placeholder="Enter Target ID (e.g., 123456789) or use Target Resolver below"
+                    placeholder="Enter Target ID (e.g., 123456789)"
                     class="flex-1 px-4 py-3 bg-zinc-800 border border-zinc-600 rounded-md text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent"
                   />
                 </div>
@@ -144,13 +144,7 @@
               </div>
             </div>
 
-            <!-- Target Resolver Tab -->
-            <div v-if="activeTab === 'resolver'">
-              <TargetResolver
-                @target-selected="onTargetSelected"
-                @error="onError"
-              />
-            </div>
+
 
             <!-- Legacy Planet Info Tab - only show when we have backend data -->
             <div v-if="activeTab === 'info' && hasSuccessfulBackendData && exoplanetData" class="space-y-6">
@@ -249,16 +243,13 @@ import Header from '@/components/layout/Header.vue'
 import Button from '@/components/ui/Button.vue'
 import ExoplanetPrediction from '@/components/ExoplanetPrediction.vue'
 import LightcurveChart from '@/components/LightcurveChart.vue'
-import TargetResolver from '@/components/TargetResolver.vue'
+
 import { usePlanetGenerator, type ExoplanetData } from '@/composables/usePlanetGenerator'
 import { useExoScoutAPI, type Mission } from '@/composables/useExoScoutAPI'
 
 const route = useRoute()
 const planetContainer = ref<HTMLElement>()
 const exoplanetData = ref<ExoplanetData | null>(null)
-
-// Get API functions
-const { resolveTarget } = useExoScoutAPI()
 
 // Backend integration state
 const targetInput = ref('')
@@ -274,19 +265,17 @@ const hasSuccessfulLightcurve = ref(false)
 
 // Store prediction data for planet visualization
 const predictionData = ref<any>(null)
-const resolveData = ref<any>(null)
 
 // Tab configuration - computed to show only relevant tabs
 const allTabs = [
   { id: 'prediction', label: 'AI Prediction' },
   { id: 'lightcurve', label: 'Lightcurve Data' },
-  { id: 'resolver', label: 'Target Resolver' },
   { id: 'info', label: 'Planet Info' }
 ]
 
 const availableTabs = computed(() => {
-  // Always show prediction, lightcurve, and resolver tabs
-  const baseTabs = allTabs.filter(tab => ['prediction', 'lightcurve', 'resolver'].includes(tab.id))
+  // Always show prediction and lightcurve tabs
+  const baseTabs = allTabs.filter(tab => ['prediction', 'lightcurve'].includes(tab.id))
   
   // Only show info tab if we have successful backend data
   if (hasSuccessfulBackendData.value) {
@@ -310,8 +299,8 @@ const initializePlanet = () => {
   exoplanetData.value = generateExoplanetData(searchId)
   
   if (planetContainer.value) {
-    // Pass resolve data and prediction data to generate appropriate planet type
-    const planetParams = generatePlanetParams(searchId, resolveData.value, predictionData.value)
+    // Pass prediction data to generate appropriate planet type
+    const planetParams = generatePlanetParams(searchId, predictionData.value)
     const planet = createPlanet(planetParams)
     const sceneResult = setupPlanetScene(planetContainer.value, planet)
     cleanupPlanet = sceneResult.cleanup
@@ -341,7 +330,7 @@ const regeneratePlanet = () => {
   exoplanetData.value = generateExoplanetData(randomId)
   
   if (planetContainer.value) {
-    const planetParams = generatePlanetParams(randomId, resolveData.value, predictionData.value)
+    const planetParams = generatePlanetParams(randomId)
     const planet = createPlanet(planetParams)
     const sceneResult = setupPlanetScene(planetContainer.value, planet)
     cleanupPlanet = sceneResult.cleanup
@@ -357,21 +346,6 @@ const analyzeTarget = async () => {
   try {
     currentTargetId.value = targetInput.value.trim()
     
-    // First, try to resolve the target to get disposition status and metadata
-    try {
-      const resolved = await resolveTarget(currentTargetId.value)
-      resolveData.value = resolved
-      console.log('Target resolved:', resolved)
-      
-      // Update mission if resolved successfully
-      if (resolved.mission) {
-        currentMission.value = resolved.mission as any
-      }
-    } catch (resolveError) {
-      console.warn('Could not resolve target:', resolveError)
-      resolveData.value = null
-    }
-    
     // Use the selected mission instead of auto-detecting
     // currentMission.value is already set by the dropdown
     
@@ -385,12 +359,7 @@ const analyzeTarget = async () => {
   }
 }
 
-const onTargetSelected = (mission: Mission, targetId: string, targetData: any) => {
-  currentTargetId.value = targetId
-  currentMission.value = mission
-  targetInput.value = targetId
-  activeTab.value = 'prediction'
-}
+
 
 const onPredictionComplete = (prediction: any) => {
   console.log('Prediction completed:', prediction)

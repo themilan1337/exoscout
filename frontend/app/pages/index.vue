@@ -72,7 +72,7 @@ const selectedMission = ref('')
 const availableMissions = ref<string[]>([])
 const isLoadingMissions = ref(false)
 
-const { getAvailableMissions, resolveTarget } = useExoScoutAPI()
+const { getAvailableMissions } = useExoScoutAPI()
 
 // Load available missions on component mount
 const loadAvailableMissions = async () => {
@@ -105,21 +105,7 @@ const searchExoplanet = async () => {
   }
 }
 
-// Watch for mission changes to potentially auto-resolve data
-watch(selectedMission, async (newMission) => {
-  if (newMission && exoplanetId.value && exoplanetId.value.trim() !== '') {
-    // Auto-resolve target data when both mission and ID are available
-    try {
-      const targetId = exoplanetId.value.trim()
-      if (targetId) {
-        const resolvedData = await resolveTarget(targetId)
-        console.log('Auto-resolved data:', resolvedData)
-      }
-    } catch (err) {
-      console.log('Auto-resolution failed, will proceed with manual search')
-    }
-  }
-})
+
 
 // Load missions on component mount
 onMounted(() => {

@@ -50,24 +50,14 @@ export interface ExoplanetData {
 
 export function usePlanetGenerator() {
   // Generate planet parameters with seeded randomness - Earth-like and realistic
-  const generatePlanetParams = (id: string, resolveData?: any, predictionData?: any): PlanetParams => {
+  const generatePlanetParams = (id: string, predictionData?: any): PlanetParams => {
     const seed = hashCode(id)
     const random = seededRandom(seed)
     
-    // Determine if this should be a "bad" planet based on resolve data disposition or prediction data
-    let isConfirmedPlanet = false
-    
-    // Check resolve data first (from NASA Exoplanet Archive)
-    if (resolveData?.metadata) {
-      const disposition = resolveData.metadata.tfopwg_disp || resolveData.metadata.koi_disposition
-      // PC = Planet Candidate, CP = Confirmed Planet, FP = False Positive
-      isConfirmedPlanet = disposition === 'PC' || disposition === 'CP'
-    } else if (predictionData) {
-      // Fallback to prediction data if no resolve data
-      isConfirmedPlanet = predictionData?.classification === 'CONFIRMED' || 
-                         predictionData?.classification === 'CANDIDATE' ||
-                         (predictionData?.threshold && predictionData.threshold > 0.5)
-    }
+    // Determine if this should be a "bad" planet based on prediction data
+    const isConfirmedPlanet = predictionData?.classification === 'CONFIRMED' || 
+                             predictionData?.classification === 'CANDIDATE' ||
+                             (predictionData?.threshold && predictionData.threshold > 0.5)
     
     if (!isConfirmedPlanet && predictionData) {
       // Generate a "bad" planet - no oceans, bad colors, hostile environment
