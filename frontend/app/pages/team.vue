@@ -18,7 +18,7 @@
       <Header />
       
       <div class="max-w-4xl mx-auto px-6 py-16">
-        <ScrambleText
+        <ScrambleOld
           trigger="auto"
           :auto-delay="800"
           :animate-on-mount="true"
@@ -29,7 +29,7 @@
         >
           NASA Space Apps Challenge 2025<br>
           Project ExoScout by Synapse team
-        </ScrambleText>
+        </ScrambleOld>
         
         <div class="text-center mb-12">
           <ScrambleText
@@ -143,9 +143,7 @@
             <div class="grid md:grid-cols-3 gap-6 text-sm">
               <div class="text-center">
                 <div class="w-12 h-12 bg-zinc-100 rounded-full mx-auto mb-3 flex items-center justify-center">
-                  <svg class="w-6 h-6 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                  </svg>
+                  <svg class="w-6 h-6 text-zinc-600" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><!-- Icon from Pixel free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" d="M24.38 19.81h-1.53v3.05h-3.04v1.52h-3.05v1.52h4.57v1.53h1.52v1.52h1.53v1.53h1.52V32h1.53v-1.52h1.52v-1.53h1.52v-1.52H32V25.9h-1.53v-1.52h-1.52v-1.52h-1.52v-1.53H25.9v-4.57h-1.52zm1.52-9.14h1.53v6.09H25.9Zm-1.52-3.05h1.52v3.05h-1.52Zm-1.53-3.05h1.53v3.05h-1.53Zm-1.52 7.62h1.52v3.05h-1.52Zm-1.52-3.05h1.52v3.05h-1.52Zm0-6.09h3.04v1.52h-3.04Zm-3.05 4.57h3.05v1.52h-3.05Zm0-6.1h3.05v1.53h-3.05ZM13.71 6.1h3.05v1.52h-3.05Zm-3.05 19.8h6.1v1.53h-6.1Zm0-25.9h6.1v1.52h-6.1ZM7.62 24.38h3.04v1.52H7.62Zm0-22.86h3.04v1.53H7.62ZM4.57 22.86h3.05v1.52H4.57Zm0-19.81h3.05v1.52H4.57ZM3.05 19.81h1.52v3.05H3.05Zm0-15.24h1.52v3.05H3.05ZM1.52 16.76h1.53v3.05H1.52Zm0-9.14h1.53v3.05H1.52ZM0 10.67h1.52v6.09H0Z"/></svg>
                 </div>
                 <ScrambleText
                   trigger="hover"
@@ -158,9 +156,7 @@
               </div>
               <div class="text-center">
                 <div class="w-12 h-12 bg-zinc-100 rounded-full mx-auto mb-3 flex items-center justify-center">
-                  <svg class="w-6 h-6 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
-                  </svg>
+                  <svg class="w-6 h-6 text-zinc-600" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><!-- Icon from Pixel free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" d="M30.48 16.005H32v7.62h-1.52Zm0-9.15H32v4.58h-1.52Zm-1.53 16.77h1.53v1.52h-1.53Zm0-13.72h-1.52v1.53h-1.52v1.52h-1.53v1.52h-1.52v1.53h-1.52v1.52h1.52v1.52h1.52v-1.52h1.53v-1.52h1.52v-1.53h1.52v-1.52h1.53v-1.52h-1.53zm-3.04-4.57h4.57v1.52h-4.57ZM3.05 25.145h25.9v1.52H3.05Zm18.29-19.81h3.04v1.52h-3.04Zm-3.05 13.71v-4.57h-1.53v6.1h6.1v-1.53z"/><path fill="currentColor" d="M19.81 16.005h1.53v-1.53h1.52v-1.52h1.52v-1.52h1.53v-1.53h1.52v-1.52h-1.52v-1.53h-1.53v1.53h-1.52v1.52h-1.52v1.53h-1.53v1.52h-1.52v1.52h1.52zm0-9.15h1.53v1.53h-1.53Zm-1.52 1.53h1.52v1.52h-1.52Zm-3.05 12.19h1.52v1.52h-1.52Zm-4.57 0h1.52v1.52h-1.52Zm-4.57 0h1.52v1.52H6.1Zm-3.05-9.14h13.71v1.52H3.05Zm-1.52 12.19h1.52v1.52H1.53Zm0-10.67h1.52v1.52H1.53ZM0 14.475h1.53v9.15H0Z"/></svg>
                 </div>
                 <ScrambleText
                   trigger="hover"
@@ -173,9 +169,7 @@
               </div>
               <div class="text-center">
                 <div class="w-12 h-12 bg-zinc-100 rounded-full mx-auto mb-3 flex items-center justify-center">
-                  <svg class="w-6 h-6 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                  </svg>
+                  <svg class="w-6 h-6 text-zinc-600" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><!-- Icon from Pixel free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" d="M27.43 6.09h-4.57V1.52h1.52V0H3.05v32h25.9V4.57h-1.52Zm0 24.39H4.57V1.52h16.76v6.1h6.1Z"/><path fill="currentColor" d="M25.91 3.05h1.52v1.52h-1.52Zm-1.53-1.53h1.53v1.53h-1.53Zm-3.05 21.34h-1.52v-9.15h-3.05v9.15h-1.52v-6.1h-3.05v6.1H7.62v-3.05h1.52v-1.52H7.62v-3.05h1.52v-1.53H7.62v-3.04H6.1v13.71h19.81v-1.52h-1.53v-7.62h-3.05z"/></svg>
                 </div>
                 <ScrambleText
                   trigger="hover"
@@ -233,6 +227,7 @@
 <script setup lang="ts">
 import Header from '@/components/layout/Header.vue'
 import ScrambleText from "@/components/ScrambleText.vue"
+import ScrambleOld from "@/components/ScrambleOld.vue"
 import Button from "@/components/ui/Button.vue"
 import Particles from "@/components/Particles.vue"
 
