@@ -19,27 +19,42 @@
       
       <div class="max-w-4xl mx-auto px-6 py-16">
         <ScrambleText
-          :className="'max-w-3xl text-pretty mx-auto leading-tight text-center font-medium text-[clamp(16px,4vw,36px)] text-zinc-100 mb-8'"
-          :radius="120" 
+          trigger="auto"
+          :auto-delay="800"
+          :animate-on-mount="true"
           :duration="1.4" 
           :speed="0.6" 
-          scrambleChars=".:*">
+          scramble-chars=".:*"
+          class="max-w-3xl text-pretty mx-auto leading-tight text-center font-medium text-[clamp(16px,4vw,36px)] text-zinc-100 mb-8"
+        >
           NASA Space Apps Challenge 2025<br>
           Project ExoScout by Synapse team
         </ScrambleText>
         
         <div class="text-center mb-12">
-          <p class="text-lg text-zinc-600 max-w-2xl mx-auto leading-relaxed">
+          <ScrambleText
+            trigger="auto"
+            :auto-delay="2000"
+            :animate-on-mount="true"
+            tag="p"
+            class="text-lg text-zinc-600 max-w-2xl mx-auto leading-relaxed"
+          >
             We are a passionate team of developers, designers, and space enthusiasts 
             participating in NASA's Space Apps Challenge 2025. Our mission: to make 
             exoplanet discovery accessible to everyone.
-          </p>
+          </ScrambleText>
         </div>
 
         <div class="border border-dashed border-zinc-300 p-6 mb-6">
           <div class="flex items-center gap-3 mb-4">
             <img src="/nasa.png" alt="NASA Logo" class="h-6 w-7" />
-            <h2 class="text-xl font-medium text-zinc-100">Challenge Details</h2>
+            <ScrambleText
+              trigger="hover"
+              tag="h2"
+              class="text-xl font-medium text-zinc-100"
+            >
+              Challenge Details
+            </ScrambleText>
           </div>
           <div class="grid md:grid-cols-2 gap-6 text-sm">
             <div>
@@ -62,7 +77,15 @@
         </div>
 
         <div>
-          <h2 class="text-2xl font-medium text-zinc-100 text-center mb-8">Meet Our Team</h2>
+          <ScrambleText
+            trigger="auto"
+            :auto-delay="3000"
+            :animate-on-mount="true"
+            tag="h2"
+            class="text-3xl font-bold text-zinc-100 mb-8"
+          >
+            Meet Our Team
+          </ScrambleText>
           <div class="grid md:grid-cols-2">
             <div class="border border-dashed border-r-0 border-zinc-300 p-6 hover:bg-zinc-900 transition-colors">
               <img 
@@ -70,7 +93,13 @@
                 alt="Milan G." 
                 class="w-16 h-16 rounded-full mb-4 object-cover"
               />
-              <h3 class="font-medium text-lg mb-2 text-zinc-100">Milan G.</h3>
+              <ScrambleText
+                trigger="hover"
+                tag="h3"
+                class="font-medium text-lg mb-2 text-zinc-100"
+              >
+                Milan G.
+              </ScrambleText>
               <p class="text-zinc-600 text-sm mb-3">Full-Stack Developer, AI & Project Manager</p>
               <p class="text-xs text-zinc-500">Full-stack developer passionate about space exploration and data visualization. Specializes in Vue.js, Node.js, and astronomical data processing.</p>
             </div>
@@ -81,7 +110,13 @@
                 alt="Bizhan A." 
                 class="w-16 h-16 rounded-full mb-4 object-cover"
               />
-              <h3 class="font-medium text-lg mb-2 text-zinc-100">Bizhan A.</h3>
+              <ScrambleText
+                trigger="hover"
+                tag="h3"
+                class="font-medium text-lg mb-2 text-zinc-100"
+              >
+                Bizhan A.
+              </ScrambleText>
               <p class="text-zinc-600 text-sm mb-3">Backend, AI & Machine Learning</p>
               <p class="text-xs text-zinc-500">UI/UX specialist focused on creating intuitive interfaces for complex astronomical data. Expert in modern web technologies and user experience design.</p>
             </div>
@@ -89,7 +124,15 @@
         </div>
 
         <div class="border border-dashed border-zinc-300 border-t-0 p-8 mb-12">
-          <h2 class="text-2xl font-medium text-zinc-100 text-center mb-6">Our Mission</h2>
+          <ScrambleText
+            trigger="auto"
+            :auto-delay="4000"
+            :animate-on-mount="true"
+            tag="h2"
+            class="text-2xl font-medium text-zinc-100 text-center mb-6"
+          >
+            Our Mission
+          </ScrambleText>
           <div class="max-w-3xl mx-auto text-center">
             <p class="text-zinc-700 leading-relaxed mb-6">
               ExoScout aims to democratize access to exoplanet discovery by creating an intuitive, 
@@ -104,7 +147,13 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                   </svg>
                 </div>
-                <h3 class="font-medium mb-2 text-zinc-100">Discover</h3>
+                <ScrambleText
+                  trigger="hover"
+                  tag="h3"
+                  class="font-medium mb-2 text-zinc-100"
+                >
+                  Discover
+                </ScrambleText>
                 <p class="text-zinc-600">Search through thousands of confirmed exoplanets</p>
               </div>
               <div class="text-center">
@@ -113,7 +162,13 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                   </svg>
                 </div>
-                <h3 class="font-medium mb-2 text-zinc-100">Filter</h3>
+                <ScrambleText
+                  trigger="hover"
+                  tag="h3"
+                  class="font-medium mb-2 text-zinc-100"
+                >
+                  Filter
+                </ScrambleText>
                 <p class="text-zinc-600">Advanced filtering by size, distance, and habitability</p>
               </div>
               <div class="text-center">
@@ -122,7 +177,13 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                   </svg>
                 </div>
-                <h3 class="font-medium mb-2 text-zinc-100">Analyze</h3>
+                <ScrambleText
+                  trigger="hover"
+                  tag="h3"
+                  class="font-medium mb-2 text-zinc-100"
+                >
+                  Analyze
+                </ScrambleText>
                 <p class="text-zinc-600">Visualize data and explore planetary characteristics</p>
               </div>
             </div>
@@ -130,13 +191,37 @@
         </div>
 
         <div class="text-center">
-          <p class="text-zinc-600 mb-6">Ready to explore the cosmos?</p>
+          <ScrambleText
+            trigger="auto"
+            :auto-delay="5000"
+            :animate-on-mount="true"
+            tag="p"
+            class="text-zinc-600 mb-6"
+          >
+            Ready to explore the cosmos?
+          </ScrambleText>
           <div class="flex justify-center gap-4">
             <NuxtLink to="/">
-              <Button variant="secondary" size="md">Start Exploring</Button>
+              <Button variant="secondary" size="md">
+                <ScrambleText 
+                  trigger="hover" 
+                  :duration="0.8"
+                  scramble-chars="★☆"
+                >
+                  Start Exploring
+                </ScrambleText>
+              </Button>
             </NuxtLink>
             <NuxtLink to="https://github.com/themilan1337/exoscout" target="_blank">
-              <Button variant="outline" size="md">View on GitHub</Button>
+              <Button variant="outline" size="md">
+                <ScrambleText 
+                  trigger="hover" 
+                  :duration="0.8"
+                  scramble-chars="<>/"
+                >
+                  View on GitHub
+                </ScrambleText>
+              </Button>
             </NuxtLink>
           </div>
         </div>

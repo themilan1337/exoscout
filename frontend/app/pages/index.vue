@@ -16,12 +16,18 @@
     />
     <div class="relative z-10">
       <Header />
-      <ScrambleText
-        :className="'max-w-5xl text-4xl text-pretty mx-auto mt-24 leading-tight text-center font-medium text-zinc-100'"
-        :radius="100" :duration="1.2" :speed="0.5" scrambleChars=".:">
+      <ScrambleOld
+        trigger="auto"
+        :auto-delay="1000"
+        :animate-on-mount="true"
+        :duration="1.2" 
+        :speed="0.5" 
+        scramble-chars=".:"
+        class="max-w-5xl text-4xl text-pretty mx-auto mt-24 leading-tight text-center font-medium text-zinc-100"
+      >
         Discover Exoplanets.<br>
-        Your gateway to real data from NASA’s <br> archives—search, filter, and explore <br> worlds beyond our solar <br> system in seconds.
-      </ScrambleText>
+        Your gateway to real data from NASA's <br> archives—search, filter, and explore <br> worlds beyond our solar <br> system in seconds.
+      </ScrambleOld>
       <div class="flex flex-col sm:flex-row mx-auto justify-center items-center mt-8 gap-2 px-4">
         <select
           v-model="selectedMission"
@@ -45,15 +51,38 @@
           variant="secondary" 
           size="sm" 
           @click="searchExoplanet"
-          :disabled="!exoplanetId || exoplanetId.trim() === '' || !selectedMission"
+          :disabled="!exoplanetId || !exoplanetId?.trim() || !selectedMission"
           class="w-full sm:w-auto"
         >
-          Find some planets
+          <ScrambleText 
+            trigger="hover" 
+            :duration="0.8"
+            :speed="0.7"
+            scramble-chars="01"
+          >
+            Find some planets
+          </ScrambleText>
         </Button>
       </div>
       <div class="flex mx-auto justify-center gap-x-4 items-center mt-8">
-        <NuxtLink to="/team" class="text-zinc-600 text-sm">Our Team<span class="inline-block ml-1">↗</span></NuxtLink>
-        <NuxtLink to="https://github.com/themilan1337/exoscout" class="text-zinc-600 text-sm">GitHub<span class="inline-block ml-1 my-auto">↗</span></NuxtLink>
+        <NuxtLink to="/team" class="text-zinc-600 text-sm">
+          <ScrambleText 
+            trigger="hover" 
+            :duration="0.6"
+            scramble-chars="▓░"
+          >
+            Our Team<span class="inline-block ml-1">↗</span>
+          </ScrambleText>
+        </NuxtLink>
+        <NuxtLink to="https://github.com/themilan1337/exoscout" class="text-zinc-600 text-sm">
+          <ScrambleText 
+            trigger="hover" 
+            :duration="0.6"
+            scramble-chars="▓░"
+          >
+            GitHub<span class="inline-block ml-1 my-auto">↗</span>
+          </ScrambleText>
+        </NuxtLink>
       </div>
     </div>
   </div>
@@ -62,12 +91,13 @@
 import { ref, onMounted, watch } from 'vue'
 import Header from '@/components/layout/Header.vue'
 import ScrambleText from "@/components/ScrambleText.vue";
+import ScrambleOld from "@/components/ScrambleOld.vue";
 import Button from "@/components/ui/Button.vue";
 import Input from "@/components/ui/Input.vue";
 import Particles from "@/components/Particles.vue";
 import { useExoScoutAPI } from '@/composables/useExoScoutAPI'
 
-const exoplanetId = ref('')
+const exoplanetId = ref<string>('')
 const selectedMission = ref('')
 const availableMissions = ref<string[]>([])
 const isLoadingMissions = ref(false)
@@ -93,12 +123,13 @@ const loadAvailableMissions = async () => {
 }
 
 const searchExoplanet = async () => {
-  if (exoplanetId.value && exoplanetId.value.trim() !== '' && selectedMission.value) {
+  const trimmedId = exoplanetId.value?.trim()
+  if (trimmedId && trimmedId !== '' && selectedMission.value) {
     // Navigate to dashboard with both mission and target ID
     await navigateTo({
       path: '/dashboard',
       query: { 
-        id: exoplanetId.value.trim(),
+        id: trimmedId,
         mission: selectedMission.value
       }
     })

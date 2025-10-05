@@ -26,26 +26,31 @@ export interface FeatureData {
 }
 
 export interface LightcurveData {
-  mission: string
-  target_id: string
-  sector?: number
-  quarter?: number
-  campaign?: number
-  data_points: number
+  mission: string;
+  target_id: number;
+  data_points: number;
   time_range: {
-    start: number
-    end: number
-  }
-  lightcurve: {
-    time: number[]
-    flux: number[]
-    flux_err: number[]
-  }
-  metadata: {
-    cadence: string
-    pipeline: string
-    quality_flags: string
-  }
+    start: number;
+    end: number;
+    duration: number;
+  };
+  flux_stats: {
+    mean: number;
+    median: number;
+    std: number;
+    min: number;
+    max: number;
+  };
+  time_series: {
+    time: number[];
+    flux: number[];
+    flux_normalized: number[];
+  };
+  sector?: string | number;
+  camera?: string | number;
+  ccd?: string | number;
+  quarter?: string | number;
+  campaign?: string | number;
 }
 
 
@@ -97,6 +102,7 @@ export const useExoScoutAPI = () => {
         ...options,
         headers: {
           'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true',
           ...options.headers
         }
       })

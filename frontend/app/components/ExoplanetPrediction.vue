@@ -4,7 +4,14 @@
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-xl font-semibold text-zinc-100 flex">
           <svg class="mr-4" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><!-- Icon from Pixel free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" d="M28.95 15.24h1.53v7.62h-1.53Zm-1.52 9.15h1.52v-1.53h-1.52v-7.62h1.52v-1.52h-1.52v-3.05H25.9v3.05H6.1v-3.05H4.57v3.05H3.05v1.52h1.52v7.62H3.05v1.53h1.52v1.52H6.1V15.24h19.8v10.67h1.53zM25.9 0h1.53v1.53H25.9Zm-1.52 25.91h1.52v1.52h-1.52Z"/><path fill="currentColor" d="M24.38 7.62h1.52v3.05h-1.52Zm0-6.09h1.52v1.52h-1.52ZM22.86 6.1h1.52v1.52h-1.52Zm0-3.05h1.52v1.53h-1.52Zm-1.53 27.43h1.53v-1.52h1.52v-1.53h-3.05zm-1.52-25.9h3.05V6.1h-3.05Zm-1.52 25.9h3.04V32h-3.04Zm-4.58-3.05v3.05h1.53v-1.52h1.52v1.52h1.53v-3.05zM12.19 3.05h7.62v1.53h-7.62Zm-1.52 27.43h3.04V32h-3.04Zm12.19-18.29V9.15h-1.53V7.62H10.67v1.53H9.14v3.04Zm-4.57-3.04h1.52v1.52h-1.52Zm-6.1 0h1.52v1.52h-1.52ZM9.14 4.58h3.05V6.1H9.14ZM7.62 27.43v1.53h1.52v1.52h1.53v-3.05zm0-21.33h1.52v1.52H7.62Zm0-3.05h1.52v1.53H7.62ZM6.1 25.91h1.52v1.52H6.1Zm0-18.29h1.52v3.05H6.1Zm0-6.09h1.52v1.52H6.1ZM4.57 0H6.1v1.53H4.57ZM1.52 15.24h1.53v7.62H1.52Z"/></svg>
-          <span class="my-auto">AI Prediction Results</span>
+          <ScrambleText
+            trigger="auto"
+            :auto-delay="500"
+            :animate-on-mount="true"
+            class="my-auto"
+          >
+            AI Prediction Results
+          </ScrambleText>
         </h3>
         <div class="flex items-center gap-2">
           <div 
@@ -81,7 +88,12 @@
       <div>
         <h4 class="text-lg font-medium text-zinc-100 mb-3 flex">
           <svg class="mr-4" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><!-- Icon from Pixel free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" d="M30.48 10.66h-9.15v1.53h-1.52v1.52h-1.52v1.52h-1.53V4.57h1.53V1.52h-1.53V0h-1.52v1.52h-1.53v3.05h-1.52v3.05h-1.52v3.04H1.52v1.53H0v1.52h1.52v1.52h1.53v1.53H6.1v1.52h1.52v3.05h1.52v-1.52h3.05v-1.53h3.05v1.53h-1.53v1.52h-1.52v1.52h-1.52v1.53H9.14v1.52H7.62v1.53H6.1v1.52H4.57v-1.52H3.05v3.04h1.52V32h3.05v-1.53h1.52v-1.52h3.05v-1.52h1.52V25.9h1.53v-1.52h1.52v-4.57h1.53v1.52h1.52v1.52h1.52v1.53h1.53v1.52h1.52v1.53h1.52v3.04h-1.52V32h3.05v-1.53h1.52v-3.04h-1.52v-3.05H25.9v-3.05h-1.52v-3.05h1.52v-1.52h-3.04v1.52h-6.1v-1.52h4.57v-1.53h1.53v-1.52h6.09v1.52h1.53v-1.52H32v-1.52h-1.52Zm-16.77 6.1h-3.04v-1.53H7.62v-1.52H4.57v-1.52h7.62v1.52h1.52Z"/><path fill="currentColor" d="M25.9 15.23h3.05v1.53H25.9Zm-3.04 13.72h1.52v1.52h-1.52Zm-3.05-1.52h3.05v1.52h-3.05Zm0-19.81h1.52v3.04h-1.52ZM18.29 25.9h1.52v1.53h-1.52Zm0-21.33h1.52v3.05h-1.52Zm-1.53 19.81h1.53v1.52h-1.53ZM6.1 21.33h1.52v3.05H6.1Zm-1.53 3.05H6.1v3.05H4.57Z"/></svg>
-          <span class="my-auto">Features Used in Prediction</span>
+          <ScrambleText
+            trigger="hover"
+            class="my-auto"
+          >
+            Features Used in Prediction
+          </ScrambleText>
         </h4>
         
         <div v-if="Object.keys(availableFeatures).length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
@@ -113,7 +125,15 @@
     </div>
 
     <div v-if="featuresData" class="p-6 rounded-lg border border-dashed border-zinc-600">
-      <h3 class="text-xl font-semibold text-zinc-100 mb-4">Complete Feature Set</h3>
+      <ScrambleText
+        trigger="auto"
+        :auto-delay="1000"
+        :animate-on-mount="true"
+        tag="h3"
+        class="text-xl font-semibold text-zinc-100 mb-4"
+      >
+        Complete Feature Set
+      </ScrambleText>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         <div 
           v-for="(value, key) in featuresData.features" 
@@ -146,6 +166,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useExoScoutAPI, type PredictionResult, type FeatureData, type Mission } from '@/composables/useExoScoutAPI'
+import ScrambleText from '@/components/ScrambleText.vue'
 
 interface Props {
   targetId: string
