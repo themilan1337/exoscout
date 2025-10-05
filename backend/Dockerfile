@@ -16,6 +16,7 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser
 
 # Set work directory
 WORKDIR /app
+RUN mkdir -p cache .cache && chmod -R 777 cache .cache
 
 # Create necessary directories
 RUN mkdir -p logs cache .cache && \
