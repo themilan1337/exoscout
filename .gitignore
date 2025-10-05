@@ -1,0 +1,57 @@
+# =============================================================================
+# ExoScout Project .gitignore (Root Level)
+# =============================================================================
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Cache directories
+cache/
+.cache/
+
+# Log files
+logs/
+*.log
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Build artifacts
+build/
+dist/
+
+# Node.js (for frontend)
+node_modules/
+.output/
+.nuxt/
+.nitro/
+
+# Python distribution
+*.egg-info/
+*.egg
