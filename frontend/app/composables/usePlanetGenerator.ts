@@ -75,7 +75,7 @@ export function usePlanetGenerator() {
       bumpStrength: 1.0,
       bumpOffset: 0.001,
       // Earth-like colors with slight variations
-      color1: new THREE.Color(0.014, 0.117, 0.279), // Deep ocean blue
+      color1: new THREE.Color(0.014, 0.117, 0.279), // Deep ocean zinc
       color2: new THREE.Color(0.080, 0.527, 0.351), // Shallow water/coastal
       color3: new THREE.Color(0.620, 0.516, 0.372), // Beach/desert
       color4: new THREE.Color(0.149, 0.254, 0.084), // Forest/vegetation
@@ -224,7 +224,7 @@ export function usePlanetGenerator() {
   // Setup Three.js scene for planet display - optimized for performance
   const setupPlanetScene = (container: HTMLElement, planet: THREE.Mesh) => {
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color(0x000000) // Very dark blue instead of pure black
+    scene.background = new THREE.Color(0x000000) // Very dark zinc instead of pure black
     
     // Add animated stars background
     const stars = createStarsBackground(1500)
@@ -327,6 +327,17 @@ export function usePlanetGenerator() {
       camera.position.z = Math.max(25, Math.min(100, camera.position.z)) // Clamp zoom
     }
 
+    // Zoom control functions for buttons
+    const zoomIn = () => {
+      camera.position.z -= 5
+      camera.position.z = Math.max(25, Math.min(100, camera.position.z)) // Clamp zoom
+    }
+
+    const zoomOut = () => {
+      camera.position.z += 5
+      camera.position.z = Math.max(25, Math.min(100, camera.position.z)) // Clamp zoom
+    }
+
     // Add event listeners
     renderer.domElement.addEventListener('mousedown', handleMouseDown)
     window.addEventListener('mousemove', handleMouseMove)
@@ -381,7 +392,7 @@ export function usePlanetGenerator() {
     animate(0)
 
     // Enhanced cleanup function
-    return () => {
+    const cleanup = () => {
       cancelAnimationFrame(animationId)
       window.removeEventListener('resize', handleResize)
       clearTimeout(resizeTimeout)
@@ -411,6 +422,15 @@ export function usePlanetGenerator() {
       
       renderer.dispose()
       renderer.forceContextLoss()
+    }
+
+    // Return both cleanup function and zoom controls
+    return {
+      cleanup,
+      zoomControls: {
+        zoomIn,
+        zoomOut
+      }
     }
   }
 

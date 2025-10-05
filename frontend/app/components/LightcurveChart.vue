@@ -216,8 +216,8 @@ const drawChart = () => {
   }
 
   // Draw data points
-  ctx.fillStyle = '#3b82f6' // blue-500
-  ctx.strokeStyle = '#1d4ed8' // blue-700
+  ctx.fillStyle = '#3b82f6' // zinc-500
+  ctx.strokeStyle = '#1d4ed8' // zinc-700
   
   if (times.length > 1000) {
     // For large datasets, draw as a line

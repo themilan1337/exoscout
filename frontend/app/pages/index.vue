@@ -25,7 +25,7 @@
       <div class="flex flex-col sm:flex-row mx-auto justify-center items-center mt-8 gap-2 px-4">
         <select
           v-model="selectedMission"
-          class="bg-zinc-900 border border-zinc-700 rounded-md px-4 py-1 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[120px] text-sm"
+          class="bg-zinc-900 border border-zinc-700 rounded-md px-4 py-1 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent min-w-[120px] text-sm"
         >
           <option value="">{{ isLoadingMissions ? 'Loading...' : 'Select Mission' }}</option>
           <option v-for="mission in availableMissions" :key="mission" :value="mission">

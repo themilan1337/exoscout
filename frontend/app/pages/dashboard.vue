@@ -9,6 +9,30 @@
           <!-- Show planet only if we have successful data from backend -->
           <div v-if="hasSuccessfulBackendData" ref="planetContainer" class="w-full h-full"></div>
           
+          <!-- Zoom Controls -->
+          <div v-if="hasSuccessfulBackendData" class="absolute top-4 right-4 flex flex-col gap-2 z-10">
+            <button 
+              @click="zoomIn"
+              class="bg-zinc-800/90 hover:bg-zinc-700/90 active:bg-zinc-600/90 border border-zinc-600 hover:border-zinc-500 rounded-lg p-3 text-zinc-300 hover:text-white transition-all duration-200 backdrop-blur-sm shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-zinc-500/50 cursor-pointer"
+              title="Zoom In"
+              aria-label="Zoom in on planet"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32" class="w-5 h-5">
+                <path fill="currentColor" d="M23.62 20.57H22.1v1.52h-1.53v1.53h-3.04v1.52h3.04v1.52h1.53v1.53h1.52v1.52h1.52v1.53h4.58v-1.53h1.52v-4.57h-1.52v-1.52h-1.53v-1.53h-1.52v-1.52h-1.53v-3.05h-1.52Zm1.52 3.05h1.53v1.52h1.52v1.52h1.53v1.53h-1.53v-1.53h-1.52v-1.52h-1.53Zm0-13.72h1.53v7.62h-1.53Zm-1.52-3.05h1.52V9.9h-1.52ZM22.1 5.33h1.52v1.52H22.1Zm-1.53-1.52h1.53v1.52h-1.53Zm-9.14 16.76H16V16h4.57v-4.57H16V6.85h-4.57v4.58H6.86V16h4.57zm6.1-18.29h3.04v1.53h-3.04ZM9.91 25.14h7.62v1.52H9.91Zm0-24.38h7.62v1.52H9.91ZM6.86 23.62h3.05v1.52H6.86Zm0-21.34h3.05v1.53H6.86ZM5.34 22.09h1.52v1.53H5.34Zm0-18.28h1.52v1.52H5.34ZM3.81 20.57h1.53v1.52H3.81Zm0-15.24h1.53v1.52H3.81ZM2.29 17.52h1.52v3.05H2.29Zm0-10.67h1.52V9.9H2.29ZM.76 9.9h1.53v7.62H.76Z"/>
+              </svg>
+            </button>
+            <button 
+              @click="zoomOut"
+              class="bg-zinc-800/90 hover:bg-zinc-700/90 active:bg-zinc-600/90 border border-zinc-600 hover:border-zinc-500 rounded-lg p-3 text-zinc-300 hover:text-white transition-all duration-200 backdrop-blur-sm shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-zinc-500/50 cursor-pointer"
+              title="Zoom Out"
+              aria-label="Zoom out on planet"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32" class="w-5 h-5">
+                <path fill="currentColor" d="M23.62 20.57H22.1v1.52h-1.53v1.53h-3.04v1.52h3.04v1.52h1.53v1.53h1.52v1.52h1.52v1.53h4.58v-1.53h1.52v-4.57h-1.52v-1.52h-1.53v-1.53h-1.52v-1.52h-1.53v-3.05h-1.52Zm1.52 3.05h1.53v1.52h1.52v1.52h1.53v1.53h-1.53v-1.53h-1.52v-1.52h-1.53Zm0-13.72h1.53v7.62h-1.53Zm-1.52-3.05h1.52V9.9h-1.52ZM22.1 5.33h1.52v1.52H22.1Zm-1.53-1.52h1.53v1.52h-1.53ZM6.86 11.43h13.71V16H6.86Zm10.67-9.15h3.04v1.53h-3.04ZM9.91 25.14h7.62v1.52H9.91Zm0-24.38h7.62v1.52H9.91ZM6.86 23.62h3.05v1.52H6.86Zm0-21.34h3.05v1.53H6.86ZM5.34 22.09h1.52v1.53H5.34Zm0-18.28h1.52v1.52H5.34ZM3.81 20.57h1.53v1.52H3.81Zm0-15.24h1.53v1.52H3.81ZM2.29 17.52h1.52v3.05H2.29Zm0-10.67h1.52V9.9H2.29ZM.76 9.9h1.53v7.62H.76Z"/>
+              </svg>
+            </button>
+          </div>
+          
           <!-- Placeholder when no backend data -->
           <div v-else class="w-full h-full flex items-center justify-center">
             <div class="text-center px-8">
@@ -39,7 +63,7 @@
                 <div class="flex gap-3">
                   <select
                     v-model="currentMission"
-                    class="bg-zinc-800 border border-zinc-600 rounded-md px-4 py-3 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[120px]"
+                    class="bg-zinc-800 border border-zinc-600 rounded-md px-4 py-3 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent min-w-[120px]"
                   >
                     <option value="TESS">TESS</option>
                     <option value="KEPLER">KEPLER</option>
@@ -50,7 +74,7 @@
                     @keyup.enter="analyzeTarget"
                     type="text"
                     placeholder="Enter Target ID (e.g., 123456789) or use Target Resolver below"
-                    class="flex-1 px-4 py-3 bg-zinc-800 border border-zinc-600 rounded-md text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    class="flex-1 px-4 py-3 bg-zinc-800 border border-zinc-600 rounded-md text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent"
                   />
                 </div>
               </div>
@@ -77,7 +101,7 @@
                 :class="[
                   'px-4 py-2 text-sm font-medium transition-colors',
                   activeTab === tab.id
-                    ? 'text-blue-400 border-b-2 border-blue-400'
+                    ? 'text-zinc-400 border-b-2 border-zinc-400'
                     : 'text-zinc-400 hover:text-zinc-200'
                 ]"
               >
@@ -268,6 +292,7 @@ const availableTabs = computed(() => {
 })
 
 let cleanupPlanet: (() => void) | null = null
+let planetZoomControls: { zoomIn: () => void; zoomOut: () => void } | null = null
 
 const { generatePlanetParams, generateExoplanetData, createPlanet, setupPlanetScene } = usePlanetGenerator()
 const { detectMission } = useExoScoutAPI()
@@ -282,7 +307,22 @@ const initializePlanet = () => {
   if (planetContainer.value) {
     const planetParams = generatePlanetParams(searchId)
     const planet = createPlanet(planetParams)
-    cleanupPlanet = setupPlanetScene(planetContainer.value, planet)
+    const sceneResult = setupPlanetScene(planetContainer.value, planet)
+    cleanupPlanet = sceneResult.cleanup
+    planetZoomControls = sceneResult.zoomControls
+  }
+}
+
+// Zoom control functions
+const zoomIn = () => {
+  if (planetZoomControls) {
+    planetZoomControls.zoomIn()
+  }
+}
+
+const zoomOut = () => {
+  if (planetZoomControls) {
+    planetZoomControls.zoomOut()
   }
 }
 
@@ -297,7 +337,9 @@ const regeneratePlanet = () => {
   if (planetContainer.value) {
     const planetParams = generatePlanetParams(randomId)
     const planet = createPlanet(planetParams)
-    cleanupPlanet = setupPlanetScene(planetContainer.value, planet)
+    const sceneResult = setupPlanetScene(planetContainer.value, planet)
+    cleanupPlanet = sceneResult.cleanup
+    planetZoomControls = sceneResult.zoomControls
   }
 }
 

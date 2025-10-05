@@ -78,7 +78,7 @@
               <div class="text-sm font-medium text-zinc-300">{{ mission }}</div>
               <div 
                 v-if="mission === resolvedData.primary_mission"
-                class="px-2 py-1 bg-blue-900 text-blue-300 text-xs rounded"
+                class="px-2 py-1 bg-zinc-900 text-zinc-300 text-xs rounded"
               >
                 Primary
               </div>
@@ -100,7 +100,7 @@
 
             <button
               @click.stop="selectTarget(mission as string, targetData)"
-              class="mt-3 w-full px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded transition-colors"
+              class="mt-3 w-full px-3 py-1 bg-zinc-600 hover:bg-zinc-700 text-white text-sm rounded transition-colors"
             >
               Use This Target
             </button>
