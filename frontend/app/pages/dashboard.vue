@@ -269,6 +269,9 @@ const hasSuccessfulBackendData = ref(false)
 const hasSuccessfulPrediction = ref(false)
 const hasSuccessfulLightcurve = ref(false)
 
+// Store prediction data for planet visualization
+const predictionData = ref<any>(null)
+
 // Tab configuration - computed to show only relevant tabs
 const allTabs = [
   { id: 'prediction', label: 'AI Prediction' },
@@ -303,7 +306,8 @@ const initializePlanet = () => {
   exoplanetData.value = generateExoplanetData(searchId)
   
   if (planetContainer.value) {
-    const planetParams = generatePlanetParams(searchId)
+    // Pass prediction data to generate appropriate planet type
+    const planetParams = generatePlanetParams(searchId, predictionData.value)
     const planet = createPlanet(planetParams)
     const sceneResult = setupPlanetScene(planetContainer.value, planet)
     cleanupPlanet = sceneResult.cleanup
@@ -371,6 +375,7 @@ const onTargetSelected = (mission: Mission, targetId: string, targetData: any) =
 
 const onPredictionComplete = (prediction: any) => {
   console.log('Prediction completed:', prediction)
+  predictionData.value = prediction
   hasSuccessfulPrediction.value = true
   
   // Mark as having successful backend data when we get a prediction
@@ -378,6 +383,15 @@ const onPredictionComplete = (prediction: any) => {
     hasSuccessfulBackendData.value = true
     // Initialize planet after successful data fetch
     setTimeout(() => {
+      initializePlanet()
+    }, 100)
+  } else {
+    // If planet already exists, reinitialize it with new prediction data
+    setTimeout(() => {
+      if (cleanupPlanet) {
+        cleanupPlanet()
+        cleanupPlanet = null
+      }
       initializePlanet()
     }, 100)
   }
@@ -403,6 +417,7 @@ const onError = (message: string) => {
   hasSuccessfulBackendData.value = false
   hasSuccessfulPrediction.value = false
   hasSuccessfulLightcurve.value = false
+  predictionData.value = null
   
   // Cleanup planet visualization if it exists
   if (cleanupPlanet) {

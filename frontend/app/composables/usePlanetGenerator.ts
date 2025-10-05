@@ -50,11 +50,80 @@ export interface ExoplanetData {
 
 export function usePlanetGenerator() {
   // Generate planet parameters with seeded randomness - Earth-like and realistic
-  const generatePlanetParams = (id: string): PlanetParams => {
+  const generatePlanetParams = (id: string, predictionData?: any): PlanetParams => {
     const seed = hashCode(id)
     const random = seededRandom(seed)
     
-    // smth similar to earth
+    // Determine if this should be a "bad" planet based on prediction data
+    const isConfirmedPlanet = predictionData?.classification === 'CONFIRMED' || 
+                             predictionData?.classification === 'CANDIDATE' ||
+                             (predictionData?.threshold && predictionData.threshold > 0.5)
+    
+    if (!isConfirmedPlanet && predictionData) {
+      // Generate a "bad" planet - no oceans, bad colors, hostile environment
+      const badBaseParams = {
+        type: 2,
+        radius: 20.0,
+        amplitude: 1.5, // More rough terrain
+        sharpness: 3.2, // Sharper, more hostile terrain
+        offset: 0.1, // Different offset for alien look
+        period: 0.8,
+        persistence: 0.6,
+        lacunarity: 2.2, // More chaotic terrain
+        octaves: 12,
+        undulation: 0.2, // Add some undulation for alien feel
+        ambientIntensity: 0.2, // Darker ambient
+        diffuseIntensity: 1.8, // Less diffuse light
+        specularIntensity: 0.8, // Less specular
+        shininess: 5.0, // Less shiny
+        lightDirection: new THREE.Vector3(1, 0.5, 1).normalize(),
+        lightColor: new THREE.Color(0xffddaa), // Slightly orange/hostile light
+        bumpStrength: 1.5, // More pronounced bumps
+        bumpOffset: 0.002,
+        // Hostile planet colors - no blues (no water), reds, browns, grays
+        color1: new THREE.Color(0.2, 0.1, 0.05), // Dark reddish-brown (no ocean)
+        color2: new THREE.Color(0.3, 0.15, 0.1), // Reddish dirt/rock
+        color3: new THREE.Color(0.4, 0.25, 0.15), // Sandy/rocky
+        color4: new THREE.Color(0.25, 0.2, 0.1), // Dead vegetation/rock
+        color5: new THREE.Color(0.1, 0.1, 0.1), // Dark mountains/rocks
+        transition2: 0.1, // Different transitions for alien look
+        transition3: 0.3,
+        transition4: 0.6,
+        transition5: 1.0,
+        blend12: 0.2,
+        blend23: 0.2,
+        blend34: 0.15,
+        blend45: 0.2
+      }
+      
+      // Add variations for bad planets
+      return {
+        ...badBaseParams,
+        amplitude: badBaseParams.amplitude + (random() - 0.5) * 0.4,
+        sharpness: badBaseParams.sharpness + (random() - 0.5) * 0.6,
+        period: badBaseParams.period + (random() - 0.5) * 0.3,
+        persistence: badBaseParams.persistence + (random() - 0.5) * 0.15,
+        
+        // Vary the hostile colors
+        color1: new THREE.Color(
+          Math.max(0, badBaseParams.color1.r + (random() - 0.5) * 0.1),
+          Math.max(0, badBaseParams.color1.g + (random() - 0.5) * 0.05),
+          Math.max(0, badBaseParams.color1.b + (random() - 0.5) * 0.03)
+        ),
+        color2: new THREE.Color(
+          Math.max(0, badBaseParams.color2.r + (random() - 0.5) * 0.15),
+          Math.max(0, badBaseParams.color2.g + (random() - 0.5) * 0.08),
+          Math.max(0, badBaseParams.color2.b + (random() - 0.5) * 0.05)
+        ),
+        color4: new THREE.Color(
+          Math.max(0, badBaseParams.color4.r + (random() - 0.5) * 0.1),
+          Math.max(0, badBaseParams.color4.g + (random() - 0.5) * 0.08),
+          Math.max(0, badBaseParams.color4.b + (random() - 0.5) * 0.03)
+        )
+      }
+    }
+    
+    // Generate Earth-like planet for confirmed planets
     const baseParams = {
       type: 2,
       radius: 20.0,
