@@ -64,7 +64,87 @@
           </ScrambleText>
         </Button>
       </div>
-      <div class="flex mx-auto justify-center gap-x-4 items-center mt-8">
+      
+      <!-- Test Examples Section -->
+      <div class="max-w-4xl mx-auto mt-12 px-4">
+        <div class="text-center mb-6">
+          <ScrambleText 
+            trigger="hover" 
+            :duration="0.8"
+            scramble-chars="▓░"
+            class="text-zinc-400 text-sm font-medium"
+          >
+            Try these examples
+          </ScrambleText>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <!-- TESS Examples -->
+          <div class="space-y-2">
+            <h3 class="text-zinc-500 text-xs font-medium uppercase tracking-wider">TESS</h3>
+            <div class="space-y-1">
+              <button 
+                v-for="example in tessExamples" 
+                :key="example.id"
+                @click="selectExample('TESS', example.id)"
+                class="w-full text-left px-3 py-2 bg-zinc-900/50 border border-zinc-800 rounded-md text-zinc-300 text-sm hover:bg-zinc-800/50 hover:border-zinc-700 transition-all duration-200 hover:text-zinc-100"
+              >
+                <ScrambleText 
+                  trigger="hover" 
+                  :duration="0.6"
+                  scramble-chars="01"
+                >
+                  {{ example.id }}
+                </ScrambleText>
+              </button>
+            </div>
+          </div>
+          
+          <!-- KEPLER Examples -->
+          <div class="space-y-2">
+            <h3 class="text-zinc-500 text-xs font-medium uppercase tracking-wider">KEPLER</h3>
+            <div class="space-y-1">
+              <button 
+                v-for="example in keplerExamples" 
+                :key="example.id"
+                @click="selectExample('KEPLER', example.id)"
+                class="w-full text-left px-3 py-2 bg-zinc-900/50 border border-zinc-800 rounded-md text-zinc-300 text-sm hover:bg-zinc-800/50 hover:border-zinc-700 transition-all duration-200 hover:text-zinc-100"
+              >
+                <ScrambleText 
+                  trigger="hover" 
+                  :duration="0.6"
+                  scramble-chars="01"
+                >
+                  {{ example.id }}
+                </ScrambleText>
+              </button>
+            </div>
+          </div>
+          
+          <!-- K2 Examples -->
+          <div class="space-y-2">
+            <h3 class="text-zinc-500 text-xs font-medium uppercase tracking-wider">K2</h3>
+            <div class="space-y-1">
+              <button 
+                v-for="example in k2Examples" 
+                :key="example.id"
+                @click="selectExample('K2', example.id)"
+                class="w-full text-left px-3 py-2 bg-zinc-900/50 border border-zinc-800 rounded-md text-zinc-300 text-sm hover:bg-zinc-800/50 hover:border-zinc-700 transition-all duration-200 hover:text-zinc-100"
+              >
+                <ScrambleText 
+                  trigger="hover" 
+                  :duration="0.6"
+                  scramble-chars="01"
+                >
+                  {{ example.id }}
+                </ScrambleText>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex mx-auto justify-center gap-x-4 items-center mt-12">
         <NuxtLink to="/team" class="text-zinc-600 text-sm">
           <ScrambleText 
             trigger="hover" 
@@ -104,6 +184,28 @@ const isLoadingMissions = ref(false)
 
 const { getAvailableMissions } = useExoScoutAPI()
 
+// Test examples data
+const tessExamples = ref([
+  { id: '307210830' },
+  { id: '50365310' },
+])
+
+const keplerExamples = ref([
+  { id: '10666592' },
+  { id: '11446443' }
+])
+
+const k2Examples = ref([
+  { id: '206103150' },
+  { id: '201367065' },
+])
+
+// Function to select an example and populate the form
+const selectExample = (mission: string, id: string) => {
+  selectedMission.value = mission
+  exoplanetId.value = id
+}
+
 // Load available missions on component mount
 const loadAvailableMissions = async () => {
   isLoadingMissions.value = true
@@ -112,7 +214,7 @@ const loadAvailableMissions = async () => {
     // Set default mission to TESS if available
     if (availableMissions.value.includes('TESS')) {
       selectedMission.value = 'TESS'
-    } else if (availableMissions.value.length > 0) {
+    } else if (availableMissions.value.length > 0 && availableMissions.value[0]) {
       selectedMission.value = availableMissions.value[0]
     }
   } catch (err: any) {

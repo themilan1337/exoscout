@@ -1,5 +1,21 @@
 # 🌌 ExoScout - AI-Powered Exoplanet Discovery Platform
 
+# Live demo: https://exoscout.space/
+
+# Examples you can use for tests:
+TESS 307210830
+TESS 50365310
+TESS 88863718
+TESS 124709665
+TESS 231663901
+
+KEPLER 10666592
+KEPLER 11446443
+
+K2 206103150
+K2 201367065
+K2 228735255
+
 **NASA Space Apps Challenge 2025 - "A World Away: Hunting for Exoplanets with AI"**
 
 [![NASA Space Apps Challenge](https://img.shields.io/badge/NASA%20Space%20Apps-2025-blue.svg)](https://www.spaceappschallenge.org/2025/challenges/a-world-away-hunting-for-exoplanets-with-ai/)
