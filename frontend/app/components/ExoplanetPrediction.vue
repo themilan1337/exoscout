@@ -11,7 +11,7 @@
             :class="[
               'px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2',
               predictionData.classification === 'CONFIRMED' 
-                ? 'bg-green-900 text-green-300 border border-green-700' 
+                ? 'bg-green-900 text-green-300 border border-green-700 border-dashed' 
                 : 'bg-red-900 text-red-300 border border-red-700'
             ]"
           >
