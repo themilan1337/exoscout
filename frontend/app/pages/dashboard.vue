@@ -257,6 +257,9 @@ const route = useRoute()
 const planetContainer = ref<HTMLElement>()
 const exoplanetData = ref<ExoplanetData | null>(null)
 
+// Get API functions
+const { resolveTarget } = useExoScoutAPI()
+
 // Backend integration state
 const targetInput = ref('')
 const currentTargetId = ref<string>('')
@@ -271,6 +274,7 @@ const hasSuccessfulLightcurve = ref(false)
 
 // Store prediction data for planet visualization
 const predictionData = ref<any>(null)
+const resolveData = ref<any>(null)
 
 // Tab configuration - computed to show only relevant tabs
 const allTabs = [
@@ -306,8 +310,8 @@ const initializePlanet = () => {
   exoplanetData.value = generateExoplanetData(searchId)
   
   if (planetContainer.value) {
-    // Pass prediction data to generate appropriate planet type
-    const planetParams = generatePlanetParams(searchId, predictionData.value)
+    // Pass resolve data and prediction data to generate appropriate planet type
+    const planetParams = generatePlanetParams(searchId, resolveData.value, predictionData.value)
     const planet = createPlanet(planetParams)
     const sceneResult = setupPlanetScene(planetContainer.value, planet)
     cleanupPlanet = sceneResult.cleanup
@@ -337,7 +341,7 @@ const regeneratePlanet = () => {
   exoplanetData.value = generateExoplanetData(randomId)
   
   if (planetContainer.value) {
-    const planetParams = generatePlanetParams(randomId)
+    const planetParams = generatePlanetParams(randomId, resolveData.value, predictionData.value)
     const planet = createPlanet(planetParams)
     const sceneResult = setupPlanetScene(planetContainer.value, planet)
     cleanupPlanet = sceneResult.cleanup
@@ -352,6 +356,21 @@ const analyzeTarget = async () => {
   isAnalyzing.value = true
   try {
     currentTargetId.value = targetInput.value.trim()
+    
+    // First, try to resolve the target to get disposition status and metadata
+    try {
+      const resolved = await resolveTarget(currentTargetId.value)
+      resolveData.value = resolved
+      console.log('Target resolved:', resolved)
+      
+      // Update mission if resolved successfully
+      if (resolved.mission) {
+        currentMission.value = resolved.mission as any
+      }
+    } catch (resolveError) {
+      console.warn('Could not resolve target:', resolveError)
+      resolveData.value = null
+    }
     
     // Use the selected mission instead of auto-detecting
     // currentMission.value is already set by the dropdown

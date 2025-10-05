@@ -49,10 +49,33 @@ export interface LightcurveData {
 }
 
 export interface ResolvedTarget {
-  input_name: string
-  resolved_targets: Record<string, any>
-  primary_mission: string
-  status: string
+  mission: string
+  target: string
+  original_target: string
+  numeric_id: string
+  ra?: number
+  dec?: number
+  metadata: {
+    // TESS/TOI metadata
+    toi?: string
+    tid?: number
+    tfopwg_disp?: string  // Disposition: PC (Planet Candidate), CP (Confirmed Planet), FP (False Positive)
+    pl_orbper?: number
+    pl_rade?: number
+    st_tmag?: number
+    st_teff?: number
+    st_rad?: number
+    // Kepler/KOI metadata
+    kepoi_name?: string
+    kepid?: number
+    koi_disposition?: string  // Disposition: CONFIRMED, CANDIDATE, FALSE POSITIVE
+    koi_period?: number
+    koi_prad?: number
+    koi_kepmag?: number
+    koi_steff?: number
+    koi_srad?: number
+    [key: string]: any
+  }
 }
 
 export interface ModelStatus {
