@@ -88,7 +88,7 @@
                 <div class="flex gap-3">
                   <select
                     v-model="currentMission"
-                    class="bg-zinc-800 border border-zinc-600 rounded-md px-4 py-3 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent min-w-[120px]"
+                    class="bg-zinc-800 border border-zinc-600 rounded-md px-4 py-2 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent min-w-[120px]"
                   >
                     <option value="TESS">TESS</option>
                     <option value="KEPLER">KEPLER</option>
@@ -99,7 +99,7 @@
                     @keyup.enter="analyzeTarget"
                     type="text"
                     placeholder="Enter Target ID (e.g., 123456789)"
-                    class="flex-1 px-4 py-3 bg-zinc-800 border border-zinc-600 rounded-md text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent"
+                    class="flex-1 px-4 py-2 bg-zinc-800 border border-zinc-600 rounded-md text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent"
                   />
                 </div>
               </div>
@@ -386,7 +386,9 @@ const initializePlanet = () => {
   
   const searchId = route.query.id as string || currentTargetId.value || '12345'
   
-  exoplanetData.value = generateExoplanetData(searchId)
+  // Detect mission from the target ID to use appropriate naming
+  const detectedMission = detectMission(searchId)
+  exoplanetData.value = generateExoplanetData(searchId, detectedMission || undefined)
   
   if (planetContainer.value) {
     // Pass prediction data to generate appropriate planet type

@@ -187,23 +187,52 @@ export function usePlanetGenerator() {
   }
 
   // mock data with randomness
-  const generateExoplanetData = (id: string): ExoplanetData => {
+  const generateExoplanetData = (id: string, mission?: string): ExoplanetData => {
     const seed = hashCode(id)
     const random = seededRandom(seed)
     
     const planetTypes = ['Super Earth', 'Gas Giant', 'Rocky Planet', 'Ice Giant', 'Hot Jupiter']
-    const starNames = ['Kepler', 'TRAPPIST', 'HD', 'WASP', 'TOI', 'K2', 'EPIC']
+    
+    // Determine the appropriate naming convention based on mission
+    let starPrefix: string
+    let hostStarPrefix: string
+    
+    if (mission) {
+      switch (mission.toUpperCase()) {
+        case 'TESS':
+          starPrefix = 'TIC'
+          hostStarPrefix = 'TIC'
+          break
+        case 'KEPLER':
+          starPrefix = 'Kepler'
+          hostStarPrefix = 'Kepler'
+          break
+        case 'K2':
+          starPrefix = 'EPIC'
+          hostStarPrefix = 'EPIC'
+          break
+        default:
+          starPrefix = 'TOI'
+          hostStarPrefix = 'TOI'
+          break
+      }
+    } else {
+      // Fallback to random selection if no mission specified
+      const starNames = ['Kepler', 'TRAPPIST', 'HD', 'WASP', 'TOI', 'K2', 'EPIC']
+      starPrefix = starNames[Math.floor(random() * starNames.length)] || 'Kepler'
+      hostStarPrefix = starPrefix
+    }
     
     return {
       id,
-      name: `${starNames[Math.floor(random() * starNames.length)] || 'Kepler'}-${id}b`,
+      name: `${starPrefix}-${id}b`,
       type: planetTypes[Math.floor(random() * planetTypes.length)] || 'Rocky Planet',
       mass: `${(0.1 + random() * 10).toFixed(2)} Earth masses`,
       radius: `${(0.5 + random() * 3).toFixed(2)} Earth radii`,
       temperature: `${Math.floor(200 + random() * 800)}K`,
       distance: `${(10 + random() * 1000).toFixed(1)} light-years`,
       discoveryYear: 2009 + Math.floor(random() * 15),
-      hostStar: `${starNames[Math.floor(random() * starNames.length)] || 'Kepler'}-${id}`
+      hostStar: `${hostStarPrefix}-${id}`
     }
   }
 
