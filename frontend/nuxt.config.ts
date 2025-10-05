@@ -6,6 +6,15 @@ export default defineNuxtConfig({
   ssr: false,
   css: ['~/assets/css/main.css'],
 
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: 'https://ocie-coua-exquisitely.ngrok-free.dev', // Will be automatically populated from NUXT_PUBLIC_API_BASE_URL
+      apiVersion: 'v1',
+      apiTimeout: 30000,
+      apiDebug: false
+    }
+  },
+
   vite: {
     plugins: [
       tailwindcss(),

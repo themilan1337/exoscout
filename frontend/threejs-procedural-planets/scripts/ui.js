@@ -20,35 +20,35 @@ export default function createUI(planetParams, atmosphereParams, atmosphere, blo
   const layer1Folder = layersFolder.addFolder('Layer 1');
   layer1Folder.add(planetParams.color1.value, 'r', 0, 1).name('Red');
   layer1Folder.add(planetParams.color1.value, 'g', 0, 1).name('Green');
-  layer1Folder.add(planetParams.color1.value, 'b', 0, 1).name('Blue');
+  layer1Folder.add(planetParams.color1.value, 'b', 0, 1).name('zinc');
 
   const layer2Folder = layersFolder.addFolder('Layer 2');
   layer2Folder.add(planetParams.transition2, 'value', 0, 3).name('Transition Point');
   layer2Folder.add(planetParams.blend12, 'value', 0, 1).name('Blend Factor (1->2)');
   layer2Folder.add(planetParams.color2.value, 'r', 0, 1).name('Red');
   layer2Folder.add(planetParams.color2.value, 'g', 0, 1).name('Green');
-  layer2Folder.add(planetParams.color2.value, 'b', 0, 1).name('Blue');
+  layer2Folder.add(planetParams.color2.value, 'b', 0, 1).name('zinc');
 
   const layer3Folder = layersFolder.addFolder('Layer 3');
   layer3Folder.add(planetParams.transition3, 'value', 0, 3).name('Transition Point');
   layer3Folder.add(planetParams.blend23, 'value', 0, 1).name('Blend Factor (2->3)');
   layer3Folder.add(planetParams.color3.value, 'r', 0, 1).name('Red');
   layer3Folder.add(planetParams.color3.value, 'g', 0, 1).name('Green');
-  layer3Folder.add(planetParams.color3.value, 'b', 0, 1).name('Blue');
+  layer3Folder.add(planetParams.color3.value, 'b', 0, 1).name('zinc');
 
   const layer4Folder = layersFolder.addFolder('Layer 4');
   layer4Folder.add(planetParams.transition4, 'value', 0, 3).name('Transition Point');
   layer4Folder.add(planetParams.blend34, 'value', 0, 1).name('Blend Factor (3->4)');
   layer4Folder.add(planetParams.color4.value, 'r', 0, 1).name('Red');
   layer4Folder.add(planetParams.color4.value, 'g', 0, 1).name('Green');
-  layer4Folder.add(planetParams.color4.value, 'b', 0, 1).name('Blue');
+  layer4Folder.add(planetParams.color4.value, 'b', 0, 1).name('zinc');
 
   const layer5Folder = layersFolder.addFolder('Layer 5');
   layer5Folder.add(planetParams.transition5, 'value', 0, 3).name('Transition Point');
   layer5Folder.add(planetParams.blend45, 'value', 0, 1).name('Blend Factor (4->5)');
   layer5Folder.add(planetParams.color5.value, 'r', 0, 1).name('Red');
   layer5Folder.add(planetParams.color5.value, 'g', 0, 1).name('Green');
-  layer5Folder.add(planetParams.color5.value, 'b', 0, 1).name('Blue');
+  layer5Folder.add(planetParams.color5.value, 'b', 0, 1).name('zinc');
   
   const atmosphereFolder = gui.addFolder('Atmosphere');
   atmosphereFolder.add(atmosphereParams.thickness, 'value', 0.1, 5).name('Thickness');
@@ -62,7 +62,7 @@ export default function createUI(planetParams, atmosphereParams, atmosphere, blo
   const atmosphereColorFolder = atmosphereFolder.addFolder('Color');
   atmosphereColorFolder.add(atmosphereParams.color.value, 'r', 0, 1).name('Red');
   atmosphereColorFolder.add(atmosphereParams.color.value, 'g', 0, 1).name('Green');
-  atmosphereColorFolder.add(atmosphereParams.color.value, 'b', 0, 1).name('Blue');
+  atmosphereColorFolder.add(atmosphereParams.color.value, 'b', 0, 1).name('zinc');
   atmosphereFolder.onChange((value) => {
     atmosphere.update();
   });

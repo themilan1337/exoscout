@@ -269,68 +269,6 @@ curl -X GET "http://localhost:8000/api/v1/lightcurve/TESS/307210830?sector=1"
 
 ---
 
-## Resolution Endpoints
-
-### 9. Resolve Target Name
-
-#### `GET /api/v1/resolve/{target_name}`
-Resolve a target name to get mission-specific identifiers.
-
-**Parameters:**
-- `target_name` (string): Target name (e.g., "TOI-715", "Kepler-452", "K2-18")
-
-**Example Request:**
-```bash
-curl -X GET "http://localhost:8000/api/v1/resolve/TOI-715"
-```
-
-**Example Response:**
-```json
-{
-  "input_name": "TOI-715",
-  "resolved_targets": {
-    "TESS": {
-      "tic_id": "307210830",
-      "toi_id": "715.01",
-      "coordinates": {
-        "ra": 123.456,
-        "dec": -12.345
-      }
-    }
-  },
-  "primary_mission": "TESS",
-  "status": "resolved"
-}
-```
-
-### 10. Bulk Resolve
-
-#### `POST /api/v1/resolve/bulk`
-Resolve multiple target names at once.
-
-**Request Body:**
-```json
-{
-  "targets": ["TOI-715", "Kepler-452b", "K2-18b"],
-  "include_coordinates": true
-}
-```
-
-**Response:**
-```json
-{
-  "resolved_count": 3,
-  "failed_count": 0,
-  "results": {
-    "TOI-715": {...},
-    "Kepler-452b": {...},
-    "K2-18b": {...}
-  }
-}
-```
-
----
-
 ## Error Handling
 
 ### HTTP Status Codes
@@ -432,13 +370,7 @@ async function getLightcurve(mission, targetId, options = {}) {
   return response.json();
 }
 
-// Resolve target name
-async function resolveTarget(targetName) {
-  const response = await fetch(
-    `http://localhost:8000/api/v1/resolve/${encodeURIComponent(targetName)}`
-  );
-  return response.json();
-}
+
 ```
 
 ### Python Example
@@ -504,8 +436,7 @@ curl "http://localhost:8000/api/v1/predict/K2/206103150"
 # Get model status
 curl "http://localhost:8000/api/v1/predict/models/status"
 
-# Resolve target
-curl "http://localhost:8000/api/v1/resolve/TOI-715"
+
 ```
 
 ---

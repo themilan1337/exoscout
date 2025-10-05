@@ -19,6 +19,7 @@
 html, body {
     font-family: "Victor Mono", monospace;
     font-weight: thin;
+    background: #000;
 }
 
 @layer base {

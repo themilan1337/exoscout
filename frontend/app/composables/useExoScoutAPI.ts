@@ -26,34 +26,34 @@ export interface FeatureData {
 }
 
 export interface LightcurveData {
-  mission: string
-  target_id: string
-  sector?: number
-  quarter?: number
-  campaign?: number
-  data_points: number
+  mission: string;
+  target_id: number;
+  data_points: number;
   time_range: {
-    start: number
-    end: number
-  }
-  lightcurve: {
-    time: number[]
-    flux: number[]
-    flux_err: number[]
-  }
-  metadata: {
-    cadence: string
-    pipeline: string
-    quality_flags: string
-  }
+    start: number;
+    end: number;
+    duration: number;
+  };
+  flux_stats: {
+    mean: number;
+    median: number;
+    std: number;
+    min: number;
+    max: number;
+  };
+  time_series: {
+    time: number[];
+    flux: number[];
+    flux_normalized: number[];
+  };
+  sector?: string | number;
+  camera?: string | number;
+  ccd?: string | number;
+  quarter?: string | number;
+  campaign?: string | number;
 }
 
-export interface ResolvedTarget {
-  input_name: string
-  resolved_targets: Record<string, any>
-  primary_mission: string
-  status: string
-}
+
 
 export interface ModelStatus {
   available_missions: string[]
@@ -102,6 +102,7 @@ export const useExoScoutAPI = () => {
         ...options,
         headers: {
           'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true',
           ...options.headers
         }
       })
@@ -208,28 +209,6 @@ export const useExoScoutAPI = () => {
     const endpoint = `/api/${apiVersion}/lightcurve/${mission}/${targetId}${queryString ? `?${queryString}` : ''}`
     
     return apiRequest(endpoint)
-  }
-
-  // Resolution endpoints
-  const resolveTarget = async (targetName: string): Promise<ResolvedTarget> => {
-    return apiRequest(`/api/${apiVersion}/resolve/${encodeURIComponent(targetName)}`)
-  }
-
-  const bulkResolveTargets = async (
-    targets: string[],
-    includeCoordinates: boolean = true
-  ): Promise<{
-    resolved_count: number
-    failed_count: number
-    results: Record<string, ResolvedTarget>
-  }> => {
-    return apiRequest(`/api/${apiVersion}/resolve/bulk`, {
-      method: 'POST',
-      body: JSON.stringify({
-        targets,
-        include_coordinates: includeCoordinates
-      })
-    })
   }
 
   // Utility functions
@@ -345,8 +324,6 @@ export const useExoScoutAPI = () => {
     getAvailableMissions,
     getFeatures,
     getLightcurve,
-    resolveTarget,
-    bulkResolveTargets,
     
     // Utility methods
     clearError,
