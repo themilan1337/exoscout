@@ -266,14 +266,61 @@ def _download_kepler_sync(kep_id: int, mission: str) -> Dict[str, Any]:
                 
                 if mission == "KEPLER":
                     search_result = lk.search_lightcurve(pattern, mission="Kepler")
-                else:
-                    search_result = lk.search_lightcurve(pattern, mission="K2")
+                else:  # K2
+                    # Try different approaches for K2 data
+                    try:
+                        search_result = lk.search_lightcurve(pattern, mission="k2")
+                    except Exception as k2_error:
+                        logger.warning(f"K2 search failed for pattern '{pattern}': {k2_error}")
+                        # Try without specifying mission for K2
+                        search_result = lk.search_lightcurve(pattern)
                 
                 logger.info(f"Search result for '{pattern}': {len(search_result)} files found")
                 
                 if len(search_result) > 0:
                     logger.info(f"Downloading lightcurve with pattern: {pattern}")
-                    lc = search_result.download_all()
+                    
+                    try:
+                        lc = search_result.download_all()
+                    except Exception as download_error:
+                        logger.warning(f"Download failed for pattern '{pattern}': {download_error}")
+                        # Try downloading individual files if bulk download fails
+                        if "K2SC" in str(download_error) or "not supported" in str(download_error):
+                            logger.info(f"Trying individual file download for pattern '{pattern}'")
+                            try:
+                                # Filter out K2SC products and try standard K2 products
+                                filtered_results = []
+                                for i, result in enumerate(search_result):
+                                    if "k2sc" not in str(result).lower():
+                                        filtered_results.append(result)
+                                
+                                if filtered_results:
+                                    logger.info(f"Found {len(filtered_results)} non-K2SC products")
+                                    # Download all filtered results and create a collection
+                                    downloaded_lcs = []
+                                    for result in filtered_results:
+                                        try:
+                                            single_lc = result.download()
+                                            downloaded_lcs.append(single_lc)
+                                        except Exception as single_error:
+                                            logger.warning(f"Failed to download individual file: {single_error}")
+                                            continue
+                                    
+                                    if downloaded_lcs:
+                                        # Create a LightCurveCollection from individual downloads
+                                        import lightkurve as lk
+                                        lc = lk.LightCurveCollection(downloaded_lcs)
+                                    else:
+                                        logger.warning(f"No files successfully downloaded for pattern '{pattern}'")
+                                        continue
+                                else:
+                                    logger.warning(f"No non-K2SC products found for pattern '{pattern}'")
+                                    continue
+                            except Exception as individual_error:
+                                logger.warning(f"Individual download failed for pattern '{pattern}': {individual_error}")
+                                continue
+                        else:
+                            continue
                     
                     if lc is not None and len(lc) > 0:
                         successful_pattern = pattern
