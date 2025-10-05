@@ -73,7 +73,7 @@ async def download_tess_lightcurve(tic_id: int, ra: float, dec: float, sector: O
         
         logger.info(f"Downloading TESS lightcurve for TIC {tic_id} at {coord_str}")
         
-        async with httpx.AsyncClient(timeout=60.0) as client:
+        async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
             response = await client.get(url, params=params)
             response.raise_for_status()
             
@@ -103,16 +103,28 @@ def _process_tess_fits(fits_data: bytes, tic_id: int) -> Dict[str, Any]:
     Process TESS FITS data to extract lightcurve.
     
     Args:
-        fits_data (bytes): FITS file data
+        fits_data (bytes): FITS file data (ZIP archive from TESSCut)
         tic_id (int): TIC ID
         
     Returns:
         Dict[str, Any]: Processed lightcurve data
     """
     try:
-        # Parse FITS data
+        import zipfile
         from io import BytesIO
-        fits_file = BytesIO(fits_data)
+        
+        # TESSCut returns a ZIP file, extract the FITS file
+        zip_file = BytesIO(fits_data)
+        
+        with zipfile.ZipFile(zip_file, 'r') as zf:
+            # Find the FITS file in the ZIP
+            fits_files = [f for f in zf.namelist() if f.endswith('.fits')]
+            if not fits_files:
+                raise LightcurveError("No FITS file found in ZIP archive")
+            
+            # Read the first FITS file
+            fits_content = zf.read(fits_files[0])
+            fits_file = BytesIO(fits_content)
         
         with fits.open(fits_file) as hdul:
             # Get lightcurve data from first extension
@@ -125,6 +137,14 @@ def _process_tess_fits(fits_data: bytes, tic_id: int) -> Dict[str, Any]:
             # Extract time and flux
             time = data['TIME']
             flux = data['FLUX']
+            
+            # For TESS cutout data, flux is a 3D array (time, y, x)
+            # Sum the flux across the spatial dimensions to get the total flux
+            if flux.ndim == 3:
+                flux = np.sum(flux, axis=(1, 2))
+            elif flux.ndim == 2:
+                # If 2D, sum across the spatial dimension
+                flux = np.sum(flux, axis=1)
             
             # Remove NaN values
             valid_mask = ~(np.isnan(time) | np.isnan(flux))
