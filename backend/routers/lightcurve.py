@@ -62,9 +62,9 @@ async def download_tess_lightcurve(tic_id: int, ra: float, dec: float, sector: O
         params = {
             "ra": ra,
             "dec": dec,
-            "y": 10,  # Cutout size in pixels
-            "x": 10,
-            "units": "d",  # degrees
+            "y": 5,  # Cutout size in pixels
+            "x": 5,
+            "units": "px",  # pixels (21 arcseconds/pixel)
             "format": "fits"
         }
         
