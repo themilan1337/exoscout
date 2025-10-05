@@ -1,18 +1,32 @@
 <template>
   <div class="space-y-6">
-    <!-- Prediction Results Card -->
-    <div v-if="predictionData" class="bg-zinc-900 p-6 rounded-lg border border-zinc-700">
+    <div v-if="predictionData" class="p-6 rounded-lg border border-dashed border-zinc-600">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-xl font-semibold text-zinc-100">AI Prediction Results</h3>
+        <h3 class="text-xl font-semibold text-zinc-100 flex">
+          <svg class="mr-4" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><!-- Icon from Pixel free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" d="M28.95 15.24h1.53v7.62h-1.53Zm-1.52 9.15h1.52v-1.53h-1.52v-7.62h1.52v-1.52h-1.52v-3.05H25.9v3.05H6.1v-3.05H4.57v3.05H3.05v1.52h1.52v7.62H3.05v1.53h1.52v1.52H6.1V15.24h19.8v10.67h1.53zM25.9 0h1.53v1.53H25.9Zm-1.52 25.91h1.52v1.52h-1.52Z"/><path fill="currentColor" d="M24.38 7.62h1.52v3.05h-1.52Zm0-6.09h1.52v1.52h-1.52ZM22.86 6.1h1.52v1.52h-1.52Zm0-3.05h1.52v1.53h-1.52Zm-1.53 27.43h1.53v-1.52h1.52v-1.53h-3.05zm-1.52-25.9h3.05V6.1h-3.05Zm-1.52 25.9h3.04V32h-3.04Zm-4.58-3.05v3.05h1.53v-1.52h1.52v1.52h1.53v-3.05zM12.19 3.05h7.62v1.53h-7.62Zm-1.52 27.43h3.04V32h-3.04Zm12.19-18.29V9.15h-1.53V7.62H10.67v1.53H9.14v3.04Zm-4.57-3.04h1.52v1.52h-1.52Zm-6.1 0h1.52v1.52h-1.52ZM9.14 4.58h3.05V6.1H9.14ZM7.62 27.43v1.53h1.52v1.52h1.53v-3.05zm0-21.33h1.52v1.52H7.62Zm0-3.05h1.52v1.53H7.62ZM6.1 25.91h1.52v1.52H6.1Zm0-18.29h1.52v3.05H6.1Zm0-6.09h1.52v1.52H6.1ZM4.57 0H6.1v1.53H4.57ZM1.52 15.24h1.53v7.62H1.52Z"/></svg>
+          <span class="my-auto">AI Prediction Results</span>
+        </h3>
         <div class="flex items-center gap-2">
           <div 
             :class="[
-              'px-3 py-1 rounded-full text-sm font-medium',
+              'px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2',
               predictionData.classification === 'CONFIRMED' 
                 ? 'bg-green-900 text-green-300 border border-green-700' 
                 : 'bg-red-900 text-red-300 border border-red-700'
             ]"
           >
+            <!-- Confirmed state icon -->
+            <svg v-if="predictionData.classification === 'CONFIRMED'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 32 32" class="flex-shrink-0">
+              <!-- Icon from Pixel free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ -->
+              <path fill="currentColor" d="M28.955 15.245h1.52v1.52h-1.52Zm-1.53 1.52h1.53v1.52h-1.53Zm0-3.05h1.53v1.53h-1.53Zm-1.52 4.57h1.52v1.53h-1.52Zm0-6.09h1.52v1.52h-1.52Zm-1.52 12.19h-4.58v1.52h6.1v-6.09h-1.52zm-9.15-7.62h-1.52v-1.52h-1.53v-1.53h-1.52v1.53h-1.52v1.52h1.52v1.52h1.52v1.53h1.53v1.52h1.52v-1.52h1.53v-1.53h1.52v-1.52h1.52v-1.52h1.53v-1.53h1.52v-1.52h-1.52v-1.53h-1.53v1.53h-1.52v1.52h-1.52v1.53h-1.53zm9.15-9.14v4.57h1.52v-6.1h-6.1v1.53zm-6.1 18.28h1.52v1.53h-1.52Zm0-21.33h1.52v1.52h-1.52Zm-1.52 22.86h1.52v1.52h-1.52Zm0-24.38h1.52v1.52h-1.52Zm-1.53 25.9h1.53v1.52h-1.53Zm0-27.43h1.53v1.53h-1.53Zm-1.52 25.91h1.52v1.52h-1.52Zm0-24.38h1.52v1.52h-1.52Zm-1.53 22.85h1.53v1.53h-1.53Zm0-21.33h1.53v1.52h-1.53Zm-4.57 19.81v-4.57h-1.52v6.09h6.09v-1.52z"/>
+              <path fill="currentColor" d="M7.615 7.625h4.57v-1.53h-6.09v6.1h1.52zm-3.04 10.66h1.52v1.53h-1.52Zm0-6.09h1.52v1.52h-1.52Zm-1.53 4.57h1.53v1.52h-1.53Zm0-3.05h1.53v1.53h-1.53Zm-1.52 1.53h1.52v1.52h-1.52Z"/>
+            </svg>
+            <!-- Not confirmed state icon -->
+            <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 32 32" class="flex-shrink-0">
+              <!-- Icon from Pixel free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ -->
+              <path fill="currentColor" d="M30.48 9.14h-1.53V6.09h-1.52V4.57H25.9V3.05h-3.04V1.52h-3.05V0h-7.62v1.52H9.14v1.53H6.09v1.52H4.57v1.52H3.05v3.05H1.52v3.05H0v7.62h1.52v3.05h1.53v3.04h1.52v1.53h1.52v1.52h3.05v1.53h3.05V32h7.62v-1.52h3.05v-1.53h3.04v-1.52h1.53V25.9h1.52v-3.04h1.53v-3.05H32v-7.62h-1.52ZM19.81 25.9h-1.52v1.53h-4.58V25.9h-1.52v-4.57h1.52v-1.52h4.58v1.52h1.52Zm1.52-12.19h-1.52v3.05h-1.52v1.53h-4.58v-1.53h-1.52v-3.05h-1.52V6.09h1.52V4.57h7.62v1.52h1.52Z"/>
+              <path fill="currentColor" d="M18.29 7.62h1.52v4.57h-1.52Zm-1.53-1.53h1.53v1.53h-1.53Z"/>
+            </svg>
             {{ predictionData.classification }}
           </div>
           <div class="text-sm text-zinc-500">
@@ -21,7 +35,6 @@
         </div>
       </div>
 
-      <!-- Confidence Meter -->
       <div class="mb-6">
         <div class="flex justify-between text-sm text-zinc-400 mb-2">
           <span>Confidence Level</span>
@@ -50,7 +63,6 @@
         </div>
       </div>
 
-      <!-- Mission Info -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div class="bg-zinc-800 p-4 rounded-lg">
           <div class="text-sm text-zinc-400">Mission</div>
@@ -66,11 +78,12 @@
         </div>
       </div>
 
-      <!-- Features Used -->
       <div>
-        <h4 class="text-lg font-medium text-zinc-100 mb-3">Features Used in Prediction</h4>
+        <h4 class="text-lg font-medium text-zinc-100 mb-3 flex">
+          <svg class="mr-4" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><!-- Icon from Pixel free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" d="M30.48 10.66h-9.15v1.53h-1.52v1.52h-1.52v1.52h-1.53V4.57h1.53V1.52h-1.53V0h-1.52v1.52h-1.53v3.05h-1.52v3.05h-1.52v3.04H1.52v1.53H0v1.52h1.52v1.52h1.53v1.53H6.1v1.52h1.52v3.05h1.52v-1.52h3.05v-1.53h3.05v1.53h-1.53v1.52h-1.52v1.52h-1.52v1.53H9.14v1.52H7.62v1.53H6.1v1.52H4.57v-1.52H3.05v3.04h1.52V32h3.05v-1.53h1.52v-1.52h3.05v-1.52h1.52V25.9h1.53v-1.52h1.52v-4.57h1.53v1.52h1.52v1.52h1.52v1.53h1.53v1.52h1.52v1.53h1.52v3.04h-1.52V32h3.05v-1.53h1.52v-3.04h-1.52v-3.05H25.9v-3.05h-1.52v-3.05h1.52v-1.52h-3.04v1.52h-6.1v-1.52h4.57v-1.53h1.53v-1.52h6.09v1.52h1.53v-1.52H32v-1.52h-1.52Zm-16.77 6.1h-3.04v-1.53H7.62v-1.52H4.57v-1.52h7.62v1.52h1.52Z"/><path fill="currentColor" d="M25.9 15.23h3.05v1.53H25.9Zm-3.04 13.72h1.52v1.52h-1.52Zm-3.05-1.52h3.05v1.52h-3.05Zm0-19.81h1.52v3.04h-1.52ZM18.29 25.9h1.52v1.53h-1.52Zm0-21.33h1.52v3.05h-1.52Zm-1.53 19.81h1.53v1.52h-1.53ZM6.1 21.33h1.52v3.05H6.1Zm-1.53 3.05H6.1v3.05H4.57Z"/></svg>
+          <span class="my-auto">Features Used in Prediction</span>
+        </h4>
         
-        <!-- Available Features -->
         <div v-if="Object.keys(availableFeatures).length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
           <div 
             v-for="(value, key) in availableFeatures" 
@@ -82,7 +95,6 @@
           </div>
         </div>
         
-        <!-- No Features Available Message -->
         <div v-else class="bg-zinc-800 p-4 rounded-lg border border-zinc-600">
           <div class="flex items-center gap-2 text-amber-400 mb-2">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -100,7 +112,6 @@
       </div>
     </div>
 
-    <!-- Additional Features Card -->
     <div v-if="featuresData" class="bg-zinc-900 p-6 rounded-lg border border-zinc-700">
       <h3 class="text-xl font-semibold text-zinc-100 mb-4">Complete Feature Set</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -119,18 +130,14 @@
       </div>
     </div>
 
-    <!-- Error State -->
     <div v-if="error" class="bg-red-900/20 border border-red-700 p-4 rounded-lg">
       <div class="flex items-center gap-2 text-red-300">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-        </svg>
+        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><!-- Icon from Pixel free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" d="M30.48 24.38h-1.53v-3.05h-1.52v-3.04H25.9v-3.05h-1.52v-3.05h-1.52V9.14h-1.53V6.09h-1.52V3.05h-1.52V1.52h-1.53V0h-1.52v1.52h-1.53v1.53h-1.52v3.04h-1.52v3.05H9.14v3.05H7.62v3.05H6.09v3.05H4.57v3.04H3.05v3.05H1.52v3.05H0v3.05h1.52V32h28.96v-1.52H32v-3.05h-1.52Zm-10.67 3.05h-1.52v1.52h-4.58v-1.52h-1.52v-4.57h1.52v-1.53h4.58v1.53h1.52Zm0-10.67h-1.52v3.05h-4.58v-3.05h-1.52v-6.09h1.52V9.14h4.58v1.53h1.52Z"/><path fill="currentColor" d="M16.76 12.19h1.53v3.05h-1.53Zm-1.52-1.52h1.52v1.52h-1.52Z"/></svg>
         <span class="font-medium">Prediction Error</span>
       </div>
       <p class="text-red-200 mt-2">{{ error }}</p>
     </div>
 
-    <!-- Loading State -->
     <div v-if="isLoading" class="bg-zinc-900 p-6 rounded-lg border border-zinc-700">
       <div class="flex items-center justify-center space-x-3">
         <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-zinc-400"></div>
@@ -172,7 +179,6 @@ const {
 const predictionData = ref<PredictionResult | null>(null)
 const featuresData = ref<FeatureData | null>(null)
 
-// Computed property to get available features (non-null values)
 const availableFeatures = computed(() => {
   if (!predictionData.value?.used_features) return {}
   
@@ -185,7 +191,6 @@ const availableFeatures = computed(() => {
   return features
 })
 
-// Feature name formatting
 const featureNameMap: Record<string, string> = {
   'pl_orbper': 'Orbital Period',
   'pl_trandurh': 'Transit Duration',
@@ -231,7 +236,6 @@ const formatDate = (dateString: string): string => {
   return new Date(dateString).toLocaleDateString()
 }
 
-// Main prediction function
 const runPrediction = async () => {
   if (!props.targetId) return
 
@@ -244,11 +248,9 @@ const runPrediction = async () => {
     let detectedMission: Mission
 
     if (props.mission) {
-      // Use specified mission
       result = await predictExoplanet(props.mission, props.targetId)
       detectedMission = props.mission
     } else {
-      // Auto-detect mission
       const smartResult = await smartPredict(props.targetId)
       result = smartResult.result
       detectedMission = smartResult.detectedMission
@@ -257,7 +259,6 @@ const runPrediction = async () => {
     predictionData.value = result
     emit('predictionComplete', result)
 
-    // Also fetch complete features
     try {
       const features = await getFeatures(detectedMission, props.targetId)
       featuresData.value = features
@@ -270,14 +271,12 @@ const runPrediction = async () => {
   }
 }
 
-// Watch for changes in targetId or mission
 watch([() => props.targetId, () => props.mission], () => {
   if (props.autoPredict && props.targetId) {
     runPrediction()
   }
 }, { immediate: true })
 
-// Expose methods for manual control
 defineExpose({
   runPrediction,
   clearResults: () => {

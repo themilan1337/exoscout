@@ -6,10 +6,25 @@
       <div class="flex flex-col xl:flex-row">
         <!-- Planet Visualization -->
         <div class="w-full xl:w-1/3 h-64 xl:h-screen border-r border-gray-600 border-dashed relative">
-          <div ref="planetContainer" class="w-full h-full"></div>
+          <!-- Show planet only if we have successful data from backend -->
+          <div v-if="hasSuccessfulBackendData" ref="planetContainer" class="w-full h-full"></div>
+          
+          <!-- Placeholder when no backend data -->
+          <div v-else class="w-full h-full flex items-center justify-center">
+            <div class="text-center px-8">
+              <svg class="w-20 h-20 text-zinc-600 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <h3 class="text-xl font-semibold text-zinc-100 mb-2">Discover Exoplanets</h3>
+              <p class="text-zinc-400 text-sm mb-4">Enter a planet ID above to start exploring</p>
+              <p class="text-zinc-600 text-xs">3D planet visualization will appear after successful discovery</p>
+            </div>
+          </div>
+          
           <div class="absolute top-4 left-4 text-white">
-            <h2 class="text-lg xl:text-xl font-semibold mb-2 text-zinc-100">
-              {{ currentTargetId ? `Target: ${currentTargetId}` : (exoplanetData?.name || 'ExoScout Dashboard') }}
+            <h2 class="text-lg xl:text-xl font-semibold mb-2 text-zinc-100 flex">
+              <svg class="mr-4" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><!-- Icon from Pixel free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" d="M22.85 7.62v3.05h-1.52v4.57h1.52v1.52h1.53v1.53h-4.57v1.52h-1.53v1.52h4.57v3.05h-1.52v3.05h1.52v1.52h3.05v-1.52h1.53V25.9h1.52v-3.04h1.52v-3.05H32v-7.62h-1.53V9.14h-1.52V6.1h-1.52v1.52zm3.05-3.05h1.53V6.1H25.9Zm-3.05-1.52h3.05v1.52h-3.05Z"/><path fill="currentColor" d="M19.81 28.95h3.04v1.53h-3.04Zm0-27.43h3.04v1.53h-3.04Z"/><path fill="currentColor" d="M16.76 28.95h-1.52v-1.52h-4.58v1.52H9.14v1.53h3.05V32h7.62v-1.52h-3.05zM12.19 0h7.62v1.52h-7.62Zm-1.53 16.76h1.53v1.53h1.52v-4.58h-3.05zM6.09 27.43h3.05v1.52H6.09ZM4.57 25.9h1.52v1.53H4.57Z"/><path fill="currentColor" d="M3.05 22.86v3.04h1.52v-1.52h1.52v-1.52h1.53v-4.57H6.09v-1.53H4.57v-1.52H3.05v-1.53h1.52v-1.52h4.57v-1.52h1.52V9.14h1.53v1.53h1.52V9.14h1.53V6.1h-1.53V4.57h-3.05V3.05h1.53V1.52H9.14v1.53H6.09v1.52H4.57V6.1H3.05v3.04H1.52v3.05H0v7.62h1.52v3.05z"/></svg>
+              <span class="my-auto">{{ currentTargetId ? `Target: ${currentTargetId}` : (exoplanetData?.name || 'ExoScout Dashboard') }}</span>
             </h2>
             <p class="text-xs xl:text-sm text-zinc-600">{{ exoplanetData?.type || 'AI-Powered Exoplanet Analysis' }}</p>
           </div>
@@ -52,11 +67,11 @@
             </div>
           </div>
 
-          <!-- Tabs for different sections -->
+          <!-- Tabs for different sections - only show relevant tabs based on data availability -->
           <div class="mb-6">
             <div class="flex flex-wrap gap-2 border-b border-zinc-700">
               <button
-                v-for="tab in tabs"
+                v-for="tab in availableTabs"
                 :key="tab.id"
                 @click="activeTab = tab.id"
                 :class="[
@@ -115,8 +130,8 @@
               />
             </div>
 
-            <!-- Legacy Planet Info Tab -->
-            <div v-if="activeTab === 'info' && exoplanetData" class="space-y-6">
+            <!-- Legacy Planet Info Tab - only show when we have backend data -->
+            <div v-if="activeTab === 'info' && hasSuccessfulBackendData && exoplanetData" class="space-y-6">
               <div>
                 <h1 class="text-3xl font-bold text-white mb-2">{{ exoplanetData.name }}</h1>
                 <p class="text-lg text-zinc-600">{{ exoplanetData.type }}</p>
@@ -199,13 +214,6 @@
                 </Button>
               </div>
             </div>
-            
-            <div v-else-if="activeTab === 'info'" class="flex items-center justify-center h-64">
-              <div class="text-center">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-zinc-900 mx-auto mb-4"></div>
-                <p class="text-zinc-600">Generating exoplanet...</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -234,13 +242,30 @@ const currentMission = ref<Mission>('TESS')
 const isAnalyzing = ref(false)
 const activeTab = ref('prediction')
 
-// Tab configuration
-const tabs = [
+// Track if we have successful backend data
+const hasSuccessfulBackendData = ref(false)
+const hasSuccessfulPrediction = ref(false)
+const hasSuccessfulLightcurve = ref(false)
+
+// Tab configuration - computed to show only relevant tabs
+const allTabs = [
   { id: 'prediction', label: 'AI Prediction' },
   { id: 'lightcurve', label: 'Lightcurve Data' },
   { id: 'resolver', label: 'Target Resolver' },
   { id: 'info', label: 'Planet Info' }
 ]
+
+const availableTabs = computed(() => {
+  // Always show prediction, lightcurve, and resolver tabs
+  const baseTabs = allTabs.filter(tab => ['prediction', 'lightcurve', 'resolver'].includes(tab.id))
+  
+  // Only show info tab if we have successful backend data
+  if (hasSuccessfulBackendData.value) {
+    baseTabs.push(allTabs.find(tab => tab.id === 'info')!)
+  }
+  
+  return baseTabs
+})
 
 let cleanupPlanet: (() => void) | null = null
 
@@ -248,7 +273,9 @@ const { generatePlanetParams, generateExoplanetData, createPlanet, setupPlanetSc
 const { detectMission } = useExoScoutAPI()
 
 const initializePlanet = () => {
-  const searchId = route.query.id as string || '12345'
+  if (!hasSuccessfulBackendData.value) return
+  
+  const searchId = route.query.id as string || currentTargetId.value || '12345'
   
   exoplanetData.value = generateExoplanetData(searchId)
   
@@ -304,12 +331,30 @@ const onTargetSelected = (mission: Mission, targetId: string, targetData: any) =
 
 const onPredictionComplete = (prediction: any) => {
   console.log('Prediction completed:', prediction)
-  // You can add additional logic here if needed
+  hasSuccessfulPrediction.value = true
+  
+  // Mark as having successful backend data when we get a prediction
+  if (!hasSuccessfulBackendData.value) {
+    hasSuccessfulBackendData.value = true
+    // Initialize planet after successful data fetch
+    setTimeout(() => {
+      initializePlanet()
+    }, 100)
+  }
 }
 
 const onLightcurveLoaded = (data: any) => {
   console.log('Lightcurve data loaded:', data)
-  // You can add additional logic here if needed
+  hasSuccessfulLightcurve.value = true
+  
+  // Mark as having successful backend data when we get lightcurve data
+  if (!hasSuccessfulBackendData.value) {
+    hasSuccessfulBackendData.value = true
+    // Initialize planet after successful data fetch
+    setTimeout(() => {
+      initializePlanet()
+    }, 100)
+  }
 }
 
 const onError = (message: string) => {
@@ -318,8 +363,7 @@ const onError = (message: string) => {
 }
 
 onMounted(() => {
-  // Initialize planet with delay
-  setTimeout(initializePlanet, 100)
+  // Don't initialize planet immediately - wait for backend data
   
   // Check if there's a target ID in the route query (support both 'id' and 'target' parameters)
   const routeTargetId = (route.query.id as string) || (route.query.target as string)

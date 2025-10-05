@@ -3,7 +3,10 @@
     <!-- Chart Container -->
     <div class="bg-zinc-900 p-6 rounded-lg border border-zinc-700">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-xl font-semibold text-zinc-100">Lightcurve Data</h3>
+        <h3 class="text-xl font-semibold text-zinc-100 flex">
+          <svg class="mr-4 my-auto" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><!-- Icon from Pixel free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" d="M27.43 6.09h-4.57V1.52h1.52V0H3.05v32h25.9V4.57h-1.52Zm0 24.39H4.57V1.52h16.76v6.1h6.1Z"/><path fill="currentColor" d="M25.91 3.05h1.52v1.52h-1.52Zm-1.53-1.53h1.53v1.53h-1.53Zm-3.05 21.34h-1.52v-9.15h-3.05v9.15h-1.52v-6.1h-3.05v6.1H7.62v-3.05h1.52v-1.52H7.62v-3.05h1.52v-1.53H7.62v-3.04H6.1v13.71h19.81v-1.52h-1.53v-7.62h-3.05z"/></svg>
+          <span class="my-auto">Lightcurve Data</span>
+        </h3>
         <div class="flex items-center gap-2">
           <button
             v-if="lightcurveData"
@@ -29,8 +32,8 @@
       <!-- Loading State -->
       <div v-else-if="isLoading" class="flex items-center justify-center h-80 bg-zinc-800 rounded">
         <div class="flex items-center space-x-3">
-          <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-zinc-400"></div>
-          <span class="text-zinc-400">Loading lightcurve data...</span>
+          <svg class="animate-spin text-zinc-500" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><!-- Icon from Pixel free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" d="M30.47 16.76h-3.05v-3.05h3.05v-1.52H25.9v1.52h-1.52v4.58h1.52v1.52h4.57v-1.52H32v-4.58h-1.53zm-3.05 6.1h1.53v4.57h-1.53Zm-4.57-1.53v1.53h-1.52v4.57h1.52v1.52h4.57v-1.52h-3.04v-4.57h3.04v-1.53zm4.57-10.66V9.14h1.53V4.57h-1.53v3.05H25.9V6.09h-1.52V4.57h3.04V3.05h-4.57v1.52h-1.52v4.57h1.52v1.53zM18.28 25.9h1.52v4.58h-1.52ZM19.8 1.52h-1.52V0h-4.57v1.52h-1.52v4.57h1.52v1.53h4.57V6.09h1.52zm-6.09 28.96h4.57V32h-4.57Zm0-6.1h4.57v1.52h-4.57Zm-1.52 1.52h1.52v4.58h-1.52Zm-3.05 3.05v-1.52h1.52v-4.57H9.14v-1.53H4.57v1.53h3.04v4.57H4.57v1.52zm1.52-24.38H9.14V3.05H4.57v1.52h3.04v1.52H6.09v1.53H4.57V4.57H3.04v4.57h1.53v1.53h4.57V9.14h1.52zM3.04 22.86h1.53v4.57H3.04Zm-1.52-3.05h4.57v-1.52h1.52v-4.58H6.09v-1.52H1.52v1.52h3.05v3.05H1.52v-3.05H0v4.58h1.52z"/></svg>
+          <span class="text-zinc-400">Loading some data...</span>
         </div>
       </div>
 
