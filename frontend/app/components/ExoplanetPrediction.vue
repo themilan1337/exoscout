@@ -63,16 +63,16 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div class="bg-zinc-800 p-4 rounded-lg">
+      <div class="grid grid-cols-1 md:grid-cols-3 mb-6">
+        <div class="border border-zinc-600 border-dashed p-4">
           <div class="text-sm text-zinc-400">Mission</div>
           <div class="text-lg font-medium text-zinc-100">{{ predictionData.mission }}</div>
         </div>
-        <div class="bg-zinc-800 p-4 rounded-lg">
+        <div class="border-zinc-600 border-dashed border-t border-b p-4">
           <div class="text-sm text-zinc-400">Target ID</div>
           <div class="text-lg font-medium text-zinc-100">{{ predictionData.target_id }}</div>
         </div>
-        <div class="bg-zinc-800 p-4 rounded-lg">
+        <div class="border border-zinc-600 border-dashed p-4">
           <div class="text-sm text-zinc-400">Model Threshold</div>
           <div class="text-lg font-medium text-zinc-100">{{ typeof predictionData.threshold === 'number' ? Math.round(predictionData.threshold * 100) : 'N/A' }}%</div>
         </div>
@@ -112,7 +112,7 @@
       </div>
     </div>
 
-    <div v-if="featuresData" class="bg-zinc-900 p-6 rounded-lg border border-zinc-700">
+    <div v-if="featuresData" class="p-6 rounded-lg border border-dashed border-zinc-600">
       <h3 class="text-xl font-semibold text-zinc-100 mb-4">Complete Feature Set</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         <div 

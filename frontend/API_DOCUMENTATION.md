@@ -370,13 +370,7 @@ async function getLightcurve(mission, targetId, options = {}) {
   return response.json();
 }
 
-// Resolve target name
-async function resolveTarget(targetName) {
-  const response = await fetch(
-    `http://localhost:8000/api/v1/resolve/${encodeURIComponent(targetName)}`
-  );
-  return response.json();
-}
+
 ```
 
 ### Python Example
