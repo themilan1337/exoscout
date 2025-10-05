@@ -30,7 +30,7 @@
             {{ predictionData.classification }}
           </div>
           <div class="text-sm text-zinc-500">
-            {{ Math.round(predictionData.probability * 100) }}% confidence
+            {{ typeof predictionData.probability === 'number' ? Math.round(predictionData.probability * 100) : 'N/A' }}% confidence
           </div>
         </div>
       </div>
@@ -38,26 +38,26 @@
       <div class="mb-6">
         <div class="flex justify-between text-sm text-zinc-400 mb-2">
           <span>Confidence Level</span>
-          <span>{{ Math.round(predictionData.probability * 100) }}%</span>
+          <span>{{ typeof predictionData.probability === 'number' ? Math.round(predictionData.probability * 100) : 'N/A' }}%</span>
         </div>
         <div class="w-full bg-zinc-800 rounded-full h-3">
           <div 
             :class="[
               'h-3 rounded-full transition-all duration-500',
-              predictionData.probability >= predictionData.threshold 
+              (typeof predictionData.probability === 'number' && typeof predictionData.threshold === 'number' && predictionData.probability >= predictionData.threshold)
                 ? 'bg-gradient-to-r from-green-600 to-green-400' 
                 : 'bg-gradient-to-r from-red-600 to-red-400'
             ]"
-            :style="{ width: `${predictionData.probability * 100}%` }"
+            :style="{ width: `${typeof predictionData.probability === 'number' ? predictionData.probability * 100 : 0}%` }"
           ></div>
         </div>
         <div class="flex justify-between text-xs text-zinc-500 mt-1">
           <span>0%</span>
           <span 
             class="text-zinc-300"
-            :style="{ marginLeft: `${predictionData.threshold * 100 - 5}%` }"
+            :style="{ marginLeft: `${typeof predictionData.threshold === 'number' ? predictionData.threshold * 100 - 5 : 0}%` }"
           >
-            Threshold: {{ Math.round(predictionData.threshold * 100) }}%
+            Threshold: {{ typeof predictionData.threshold === 'number' ? Math.round(predictionData.threshold * 100) : 'N/A' }}%
           </span>
           <span>100%</span>
         </div>
@@ -74,7 +74,7 @@
         </div>
         <div class="bg-zinc-800 p-4 rounded-lg">
           <div class="text-sm text-zinc-400">Model Threshold</div>
-          <div class="text-lg font-medium text-zinc-100">{{ Math.round(predictionData.threshold * 100) }}%</div>
+          <div class="text-lg font-medium text-zinc-100">{{ typeof predictionData.threshold === 'number' ? Math.round(predictionData.threshold * 100) : 'N/A' }}%</div>
         </div>
       </div>
 
@@ -123,10 +123,6 @@
           <div class="text-xs text-zinc-400 uppercase tracking-wide">{{ formatFeatureName(key) }}</div>
           <div class="text-sm font-medium text-zinc-100">{{ formatFeatureValue(key, value) }}</div>
         </div>
-      </div>
-      <div class="mt-4 text-sm text-zinc-500">
-        Source: {{ featuresData.source }}
-        <span v-if="featuresData.last_updated"> • Updated: {{ formatDate(featuresData.last_updated) }}</span>
       </div>
     </div>
 
@@ -214,26 +210,58 @@ const formatFeatureValue = (key: string, value: number | null): string => {
     return 'N/A'
   }
   
+  // Convert to number if it's a string, and check if it's a valid number
+  const numValue = typeof value === 'string' ? parseFloat(value) : value
+  if (typeof numValue !== 'number' || isNaN(numValue)) {
+    return 'N/A'
+  }
+  
   if (key.includes('temp') || key.includes('teff')) {
-    return `${value.toFixed(0)} K`
+    return `${numValue.toFixed(0)} K`
   }
   if (key.includes('per') || key.includes('dur')) {
-    return `${value.toFixed(2)} days`
+    return `${numValue.toFixed(2)} days`
   }
   if (key.includes('rad')) {
-    return `${value.toFixed(2)} R⊕`
+    return `${numValue.toFixed(2)} R⊕`
   }
   if (key.includes('mag')) {
-    return `${value.toFixed(2)} mag`
+    return `${numValue.toFixed(2)} mag`
   }
   if (key.includes('dep')) {
-    return `${value.toFixed(0)} ppm`
+    return `${numValue.toFixed(0)} ppm`
   }
-  return value.toFixed(3)
+  return numValue.toFixed(3)
 }
 
 const formatDate = (dateString: string): string => {
   return new Date(dateString).toLocaleDateString()
+}
+
+const validatePredictionData = (data: any): PredictionResult | null => {
+  if (!data) return null
+  
+  // Ensure probability and threshold are numbers
+  const probability = typeof data.probability === 'string' ? parseFloat(data.probability) : data.probability
+  const threshold = typeof data.threshold === 'string' ? parseFloat(data.threshold) : data.threshold
+  
+  // Validate used_features
+  const used_features: Record<string, number> = {}
+  if (data.used_features && typeof data.used_features === 'object') {
+    Object.entries(data.used_features).forEach(([key, value]) => {
+      const numValue = typeof value === 'string' ? parseFloat(value as string) : value
+      if (typeof numValue === 'number' && !isNaN(numValue)) {
+        used_features[key] = numValue
+      }
+    })
+  }
+  
+  return {
+    ...data,
+    probability: typeof probability === 'number' && !isNaN(probability) ? probability : 0,
+    threshold: typeof threshold === 'number' && !isNaN(threshold) ? threshold : 0.5,
+    used_features
+  }
 }
 
 const runPrediction = async () => {
@@ -256,8 +284,9 @@ const runPrediction = async () => {
       detectedMission = smartResult.detectedMission
     }
 
-    predictionData.value = result
-    emit('predictionComplete', result)
+    const validatedResult = validatePredictionData(result)
+    predictionData.value = validatedResult
+    emit('predictionComplete', validatedResult || result)
 
     try {
       const features = await getFeatures(detectedMission, props.targetId)
