@@ -7,7 +7,7 @@
 #   ./tests.sh
 # =========================================================
 
-BASE_URL="http://localhost:8000/api/v1"
+BASE_URL="https://ocie-coua-exquisitely.ngrok-free.dev/api/v1"
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color

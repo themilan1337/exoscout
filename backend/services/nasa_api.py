@@ -358,11 +358,11 @@ async def get_coordinates_from_archive(mission: str, target_id: int) -> Dict[str
         mission = mission.upper()
         
         if mission == "TESS":
-            # Query TIC catalog for coordinates
+            # Query TOI table for TIC coordinates
             query = f"""
-            SELECT tic_id, ra, dec, pmra, pmdec, plx, gaia_mag, tess_mag
-            FROM tic 
-            WHERE tic_id = {target_id}
+            SELECT tid, ra, dec, st_pmra, st_pmdec, st_tmag
+            FROM toi 
+            WHERE tid = {target_id}
             """
         elif mission == "KEPLER":
             # Query Kepler Input Catalog
@@ -393,10 +393,10 @@ async def get_coordinates_from_archive(mission: str, target_id: int) -> Dict[str
             "target_id": target_id,
             "ra": result.get("ra"),
             "dec": result.get("dec"),
-            "pmra": result.get("pmra"),
-            "pmdec": result.get("pmdec"),
+            "pmra": result.get("st_pmra"),
+            "pmdec": result.get("st_pmdec"),
             "parallax": result.get("plx"),
-            "magnitude": result.get("tess_mag") or result.get("kepmag"),
+            "magnitude": result.get("st_tmag") or result.get("kepmag"),
             "gaia_mag": result.get("gaia_mag")
         }
         
