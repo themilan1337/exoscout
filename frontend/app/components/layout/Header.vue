@@ -8,12 +8,10 @@
                 <h1 class="my-auto border-r border-dashed py-1 border-zinc-600 px-2 text-sm flex items-center">ExoScout</h1>
             </NuxtLink>
             <div class="flex">
-                <h1 class="text-white border-r border-dashed border-zinc-600 px-2 py-1 text-sm transition hover:bg-zinc-900 flex items-center gap-2 cursor-pointer">by Synapse</h1>
+                <NuxtLink to="team/" class="text-white border-r border-dashed border-zinc-600 px-2 py-1 text-sm transition hover:bg-zinc-900 flex items-center gap-2 cursor-pointer">by Synapse</NuxtLink>
             </div>
             <div class="flex">
-                <button class="border-r border-dashed border-zinc-600 px-2 py-1 text-sm transition hover:bg-zinc-900 flex items-center gap-2 cursor-pointer">
-                    <svg class="size-4 text-white my-auto" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Huge Icons by Hugeicons - undefined --><g fill="none" stroke="currentColor"><path stroke-width="1.5" d="M17 12a5 5 0 1 1-10 0a5 5 0 0 1 10 0Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.996 3h.008m-.008 18h.01m6.353-15.364h.009M5.634 18.364h.01m-.01-12.728h.01m12.714 12.729h.01M20.99 12H21M3 12h.009"/></g></svg>
-                </button>
+                <NuxtLink to="/dashboard" class="text-white border-r border-dashed border-zinc-600 px-2 py-1 text-sm transition hover:bg-zinc-900 flex items-center gap-2 cursor-pointer">Dashboard</NuxtLink>
             </div>
         </div>
         <div class="flex">
