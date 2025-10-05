@@ -5,7 +5,7 @@
       <div class="w-full lg:w-1/2 h-64 lg:h-full border-r border-gray-600 border-dashed relative">
         <div ref="planetContainer" class="w-full h-full"></div>
         <div class="absolute top-4 left-4 text-white">
-          <h2 class="text-lg lg:text-xl font-semibold mb-2">{{ exoplanetData?.name || 'Loading...' }}</h2>
+          <h2 class="text-lg lg:text-xl font-semibold mb-2 text-zinc-100">{{ exoplanetData?.name || 'Loading...' }}</h2>
           <p class="text-xs lg:text-sm text-zinc-600">{{ exoplanetData?.type || '' }}</p>
         </div>
       </div>
@@ -20,37 +20,37 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-4">
               <div class="bg-zinc-900 p-4 rounded-lg">
-                <h3 class="font-semibold text-zinc-900 mb-2">Physical Properties</h3>
+                <h3 class="font-semibold text-zinc-100 mb-2">Physical Properties</h3>
                 <div class="space-y-2 text-sm">
                   <div class="flex justify-between">
                     <span class="text-zinc-600">Mass:</span>
-                    <span class="font-medium">{{ exoplanetData.mass }}</span>
+                    <span class="font-medium text-zinc-100">{{ exoplanetData.mass }}</span>
                   </div>
                   <div class="flex justify-between">
                     <span class="text-zinc-600">Radius:</span>
-                    <span class="font-medium">{{ exoplanetData.radius }}</span>
+                    <span class="font-medium text-zinc-100">{{ exoplanetData.radius }}</span>
                   </div>
                   <div class="flex justify-between">
                     <span class="text-zinc-600">Temperature:</span>
-                    <span class="font-medium">{{ exoplanetData.temperature }}</span>
+                    <span class="font-medium text-zinc-100">{{ exoplanetData.temperature }}</span>
                   </div>
                 </div>
               </div>
               
               <div class="bg-zinc-900 p-4 rounded-lg">
-                <h3 class="font-semibold text-zinc-900 mb-2">Discovery Info</h3>
+                <h3 class="font-semibold text-zinc-100 mb-2">Discovery Info</h3>
                 <div class="space-y-2 text-sm">
                   <div class="flex justify-between">
                     <span class="text-zinc-600">Discovery Year:</span>
-                    <span class="font-medium">{{ exoplanetData.discoveryYear }}</span>
+                    <span class="font-medium text-zinc-100">{{ exoplanetData.discoveryYear }}</span>
                   </div>
                   <div class="flex justify-between">
                     <span class="text-zinc-600">Host Star:</span>
-                    <span class="font-medium">{{ exoplanetData.hostStar }}</span>
+                    <span class="font-medium text-zinc-100">{{ exoplanetData.hostStar }}</span>
                   </div>
                   <div class="flex justify-between">
                     <span class="text-zinc-600">Distance:</span>
-                    <span class="font-medium">{{ exoplanetData.distance }}</span>
+                    <span class="font-medium text-zinc-100">{{ exoplanetData.distance }}</span>
                   </div>
                 </div>
               </div>
@@ -58,11 +58,11 @@
             
             <div class="space-y-4">
               <div class="bg-zinc-900 p-4 rounded-lg">
-                <h3 class="font-semibold text-zinc-900 mb-2">Search Details</h3>
+                <h3 class="font-semibold text-zinc-100 mb-2">Search Details</h3>
                 <div class="space-y-2 text-sm">
                   <div class="flex justify-between">
                     <span class="text-zinc-600">Search ID:</span>
-                    <span class="font-medium">{{ exoplanetData.id }}</span>
+                    <span class="font-medium text-zinc-100">{{ exoplanetData.id }}</span>
                   </div>
                   <div class="flex justify-between">
                     <span class="text-zinc-600">Status:</span>
@@ -71,9 +71,9 @@
                 </div>
               </div>
               
-              <div class="bg-blue-950 p-4 rounded-lg border border-blue-800">
-                <h3 class="font-semibold text-blue-700 mb-2">About This Visualization</h3>
-                <p class="text-sm text-blue-500">
+              <div class="bg-zinc-900 p-4 rounded-lg">
+                <h3 class="font-semibold text-zinc-100 mb-2">About This Visualization</h3>
+                <p class="text-sm text-zinc-500">
                   This 3D planet is procedurally generated based on your search ID. 
                   The terrain, colors, and atmospheric conditions are simulated to 
                   represent what this exoplanet might look like.
