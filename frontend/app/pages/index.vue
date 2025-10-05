@@ -74,7 +74,7 @@
             scramble-chars="▓░"
             class="text-zinc-400 text-sm font-medium"
           >
-            Try these examples
+            Try these examples *those are clickable*
           </ScrambleText>
         </div>
         
