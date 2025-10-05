@@ -34,13 +34,13 @@ const emit = defineEmits<{
 }>()
 
 const buttonClasses = computed(() => {
-  const base = 'inline-flex items-center cursor-pointer justify-center font-medium rounded-md transition focus:outline-none focus:ring-1 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+  const base = 'inline-flex items-center cursor-pointer justify-center font-medium rounded-md transition focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-offset-zinc-900 disabled:opacity-50 disabled:cursor-not-allowed'
   
   const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-    secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500',
-    outline: 'border border-gray-300 bg-transparent hover:bg-gray-50 focus:ring-gray-500',
-    ghost: 'bg-transparent hover:bg-gray-100 focus:ring-gray-500'
+    primary: 'bg-zinc-100 text-zinc-900 hover:bg-zinc-200 focus:ring-zinc-300',
+    secondary: 'bg-zinc-800 text-zinc-100 hover:bg-zinc-700 focus:ring-zinc-600',
+    outline: 'border border-zinc-700 bg-transparent text-zinc-100 hover:bg-zinc-800 focus:ring-zinc-600',
+    ghost: 'bg-transparent text-zinc-100 hover:bg-zinc-800 focus:ring-zinc-600'
   }
   
   const sizes = {

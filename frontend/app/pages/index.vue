@@ -4,7 +4,7 @@
       :particle-count="200"
       :particle-spread="10"
       :speed="0.1"
-      :particle-colors="['#000']"
+      :particle-colors="['#fff']"
       :move-particles-on-hover="false"
       :particle-hover-factor="1"
       :alpha-particles="false"
@@ -17,7 +17,7 @@
     <div class="relative z-10">
       <Header />
       <ScrambleText
-        :className="'max-w-3xl text-pretty mx-auto mt-24 leading-tight text-center font-medium text-[clamp(14px,4vw,32px)] text-black'"
+        :className="'max-w-3xl text-pretty mx-auto mt-24 leading-tight text-center font-medium text-[clamp(14px,4vw,32px)] text-zinc-100'"
         :radius="100" :duration="1.2" :speed="0.5" scrambleChars=".:">
         Discover Exoplanets.<br>
         Your gateway to real data from NASA’s <br> archives—search, filter, and explore <br> worlds beyond our solar <br> system in seconds.
@@ -61,7 +61,7 @@ const exoplanetId = ref('')
 
 const searchExoplanet = async () => {
   if (exoplanetId.value && exoplanetId.value.trim() !== '') {
-    // Navigate to dashboard with the exoplanet ID as a query parameter
+    //go to exoplanet letsgooooo!
     await navigateTo({
       path: '/dashboard',
       query: { id: exoplanetId.value.trim() }
