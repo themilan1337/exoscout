@@ -62,3 +62,4 @@ time curl -s "$BASE_URL/predict/TESS/307210830" -o /dev/null
 echo -e "\n========================================================="
 echo -e "${GREEN}✅ All ExoScout API tests completed.${NC}"
 echo "========================================================="
+

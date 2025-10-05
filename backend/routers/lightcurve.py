@@ -221,7 +221,223 @@ async def download_kepler_lightcurve(kep_id: int, mission: str = "Kepler") -> Di
 
 def _download_kepler_sync(kep_id: int, mission: str) -> Dict[str, Any]:
     """
-    Synchronous Kepler/K2 lightcurve download using astroquery.
+    Synchronous download of Kepler/K2 lightcurve data with multiple fallback strategies.
+    
+    Args:
+        kep_id (int): Kepler ID or EPIC ID
+        mission (str): Mission name (KEPLER or K2)
+        
+    Returns:
+        Dict[str, Any]: Lightcurve data
+    """
+    # Normalize mission to uppercase
+    mission = mission.upper()
+    
+    logger.info(f"Starting sync download for {mission} {kep_id}")
+    
+    # Strategy 1: Try lightkurve first
+    try:
+        import lightkurve as lk
+        logger.info(f"lightkurve version: {lk.__version__}")
+        
+        # Try multiple search patterns for lightkurve
+        search_patterns = []
+        if mission == "KEPLER":
+            search_patterns = [
+                f"KIC {kep_id}",
+                f"kplr{kep_id:09d}",
+                str(kep_id),
+                f"Kepler-{kep_id}"
+            ]
+        else:  # K2
+            search_patterns = [
+                f"EPIC {kep_id}",
+                f"ktwo{kep_id:09d}",
+                str(kep_id),
+                f"K2-{kep_id}"
+            ]
+        
+        lc = None
+        successful_pattern = None
+        
+        for pattern in search_patterns:
+            try:
+                logger.info(f"Trying lightkurve search with pattern: {pattern}")
+                
+                if mission == "KEPLER":
+                    search_result = lk.search_lightcurve(pattern, mission="Kepler")
+                else:  # K2
+                    # Try different approaches for K2 data
+                    try:
+                        search_result = lk.search_lightcurve(pattern, mission="k2")
+                    except Exception as k2_error:
+                        logger.warning(f"K2 search failed for pattern '{pattern}': {k2_error}")
+                        # Try without specifying mission for K2
+                        search_result = lk.search_lightcurve(pattern)
+                
+                logger.info(f"Search result for '{pattern}': {len(search_result)} files found")
+                
+                if len(search_result) > 0:
+                    logger.info(f"Downloading lightcurve with pattern: {pattern}")
+                    
+                    try:
+                        lc = search_result.download_all()
+                    except Exception as download_error:
+                        logger.warning(f"Download failed for pattern '{pattern}': {download_error}")
+                        # Try downloading individual files if bulk download fails
+                        if "K2SC" in str(download_error) or "not supported" in str(download_error):
+                            logger.info(f"Trying individual file download for pattern '{pattern}'")
+                            try:
+                                # Filter out K2SC products and try standard K2 products
+                                filtered_results = []
+                                for i, result in enumerate(search_result):
+                                    if "k2sc" not in str(result).lower():
+                                        filtered_results.append(result)
+                                
+                                if filtered_results:
+                                    logger.info(f"Found {len(filtered_results)} non-K2SC products")
+                                    # Download all filtered results and create a collection
+                                    downloaded_lcs = []
+                                    for result in filtered_results:
+                                        try:
+                                            single_lc = result.download()
+                                            downloaded_lcs.append(single_lc)
+                                        except Exception as single_error:
+                                            logger.warning(f"Failed to download individual file: {single_error}")
+                                            continue
+                                    
+                                    if downloaded_lcs:
+                                        # Create a LightCurveCollection from individual downloads
+                                        import lightkurve as lk
+                                        lc = lk.LightCurveCollection(downloaded_lcs)
+                                    else:
+                                        logger.warning(f"No files successfully downloaded for pattern '{pattern}'")
+                                        continue
+                                else:
+                                    logger.warning(f"No non-K2SC products found for pattern '{pattern}'")
+                                    continue
+                            except Exception as individual_error:
+                                logger.warning(f"Individual download failed for pattern '{pattern}': {individual_error}")
+                                continue
+                        else:
+                            continue
+                    
+                    if lc is not None and len(lc) > 0:
+                        successful_pattern = pattern
+                        logger.info(f"Successfully downloaded with pattern: {pattern}")
+                        break
+                        
+            except Exception as e:
+                logger.warning(f"lightkurve search failed for pattern '{pattern}': {e}")
+                continue
+        
+        if lc is not None and len(lc) > 0:
+            logger.info(f"Processing lightkurve data (successful pattern: {successful_pattern})")
+            
+            # Stitch quarters/campaigns together if multiple
+            if hasattr(lc, 'stitch'):
+                lc = lc.stitch()
+            elif len(lc) > 1:
+                # If multiple lightcurves, use the first one
+                lc = lc[0]
+            else:
+                lc = lc[0] if isinstance(lc, list) else lc
+            
+            # Extract data
+            time = lc.time.value
+            flux = lc.flux.value
+            
+            # Remove NaN values
+            valid_mask = ~(np.isnan(time) | np.isnan(flux))
+            time = time[valid_mask]
+            flux = flux[valid_mask]
+            
+            logger.info(f"lightkurve data processed: {len(time)} valid points")
+            
+            if len(time) > 0:
+                # Calculate statistics
+                flux_mean = np.mean(flux)
+                flux_std = np.std(flux)
+                flux_median = np.median(flux)
+                
+                # Normalize flux
+                flux_normalized = (flux - flux_median) / flux_median
+                
+                logger.info(f"Successfully processed {mission} lightcurve for {kep_id} via lightkurve: {len(time)} points")
+                
+                return {
+                    "mission": mission,
+                    "target_id": kep_id,
+                    "data_points": len(time),
+                    "time_range": {
+                        "start": float(np.min(time)),
+                        "end": float(np.max(time)),
+                        "duration": float(np.max(time) - np.min(time))
+                    },
+                    "flux_stats": {
+                        "mean": float(flux_mean),
+                        "median": float(flux_median),
+                        "std": float(flux_std),
+                        "min": float(np.min(flux)),
+                        "max": float(np.max(flux))
+                    },
+                    "time_series": {
+                        "time": time[:1000].tolist(),  # Limit for API response
+                        "flux": flux[:1000].tolist(),
+                        "flux_normalized": flux_normalized[:1000].tolist()
+                    },
+                    "method": "lightkurve",
+                    "search_pattern": successful_pattern
+                }
+        
+        logger.warning(f"lightkurve returned empty data for {mission} {kep_id}")
+        
+    except ImportError as e:
+        logger.error(f"lightkurve not available: {e}")
+    except Exception as e:
+        logger.error(f"lightkurve failed for {mission} {kep_id}: {e}")
+    
+    # Strategy 2: Fallback to astroquery with enhanced search
+    logger.info(f"Falling back to astroquery for {mission} {kep_id}")
+    try:
+        return _download_kepler_astroquery(kep_id, mission)
+    except Exception as e:
+        logger.error(f"astroquery fallback failed for {mission} {kep_id}: {e}")
+    
+    # Strategy 3: Final fallback - try alternative target ID formats
+    logger.info(f"Trying final fallback strategies for {mission} {kep_id}")
+    
+    # Try with different ID formats
+    alternative_ids = []
+    if mission == "KEPLER":
+        # Sometimes Kepler IDs need different formatting
+        alternative_ids = [
+            kep_id + 1,  # Sometimes off by one
+            kep_id - 1,
+            int(f"{kep_id:09d}"),  # Zero-padded format
+        ]
+    else:  # K2
+        alternative_ids = [
+            kep_id + 1,
+            kep_id - 1,
+        ]
+    
+    for alt_id in alternative_ids:
+        try:
+            logger.info(f"Trying alternative ID: {alt_id}")
+            return _download_kepler_astroquery(alt_id, mission)
+        except Exception as e:
+            logger.warning(f"Alternative ID {alt_id} failed: {e}")
+            continue
+    
+    # If all strategies fail, raise the original error
+    logger.error(f"All fallback strategies failed for {mission} {kep_id}")
+    raise LightcurveError(f"No lightcurve products found for {mission} {kep_id}")
+
+
+def _download_kepler_astroquery(kep_id: int, mission: str) -> Dict[str, Any]:
+    """
+    Fallback method using astroquery for Kepler/K2 data.
     
     Args:
         kep_id (int): Kepler ID or EPIC ID
@@ -233,57 +449,196 @@ def _download_kepler_sync(kep_id: int, mission: str) -> Dict[str, Any]:
     try:
         from astroquery.mast import Observations
         
-        # Search for observations
-        if mission.upper() == "KEPLER":
-            obs_table = Observations.query_criteria(
-                target_name=f"kplr{kep_id:09d}",
-                obs_collection="Kepler"
-            )
-        else:  # K2
-            obs_table = Observations.query_criteria(
-                target_name=f"ktwo{kep_id:09d}",
-                obs_collection="K2"
-            )
+        # Normalize mission to uppercase
+        mission = mission.upper()
         
-        if len(obs_table) == 0:
+        logger.info(f"Attempting astroquery download for {mission} {kep_id}")
+        
+        # Log astroquery version
+        try:
+            import astroquery
+            logger.info(f"astroquery version: {astroquery.__version__}")
+        except:
+            logger.warning("Could not determine astroquery version")
+        
+        # Ensure cache directory exists
+        os.makedirs("./cache/lightcurves", exist_ok=True)
+        logger.info(f"Cache directory created/verified: ./cache/lightcurves")
+        
+        # Try multiple search strategies
+        search_strategies = []
+        
+        if mission == "KEPLER":
+            search_strategies = [
+                {"target_name": f"kplr{kep_id:09d}", "obs_collection": "Kepler"},
+                {"target_name": f"KIC {kep_id}", "obs_collection": "Kepler"},
+                {"target_name": str(kep_id), "obs_collection": "Kepler"},
+            ]
+        else:  # K2
+            search_strategies = [
+                {"target_name": f"ktwo{kep_id:09d}", "obs_collection": "K2"},
+                {"target_name": f"EPIC {kep_id}", "obs_collection": "K2"},
+                {"target_name": str(kep_id), "obs_collection": "K2"},
+            ]
+        
+        obs_table = None
+        successful_strategy = None
+        
+        # Try each search strategy
+        for i, strategy in enumerate(search_strategies):
+            try:
+                logger.info(f"Search strategy {i+1}: target_name={strategy['target_name']}, obs_collection={strategy['obs_collection']}")
+                
+                obs_table = Observations.query_criteria(**strategy)
+                
+                logger.info(f"Strategy {i+1} returned {len(obs_table)} observations")
+                
+                if len(obs_table) > 0:
+                    successful_strategy = strategy
+                    break
+                    
+            except Exception as e:
+                logger.warning(f"Search strategy {i+1} failed: {e}")
+                continue
+        
+        if obs_table is None or len(obs_table) == 0:
+            logger.error(f"All search strategies failed for {mission} {kep_id}")
             raise LightcurveError(f"No {mission} observations found for {kep_id}")
+        
+        logger.info(f"Successful search strategy: {successful_strategy}")
+        
+        # Log observation details
+        for i, obs in enumerate(obs_table[:3]):  # Log first 3 observations
+            logger.info(f"Observation {i}: obsid={obs.get('obsid', 'N/A')}, "
+                       f"target_name={obs.get('target_name', 'N/A')}, "
+                       f"obs_collection={obs.get('obs_collection', 'N/A')}")
         
         # Get data products for first observation
         obs_id = obs_table[0]['obsid']
+        logger.info(f"Getting products for observation ID: {obs_id}")
+        
         products = Observations.get_product_list(obs_id)
+        logger.info(f"Found {len(products)} total products")
         
-        # Filter for lightcurve files
-        lc_products = products[products['productSubGroupDescription'] == 'LC']
+        # Try multiple product filtering strategies
+        lc_products = None
         
-        if len(lc_products) == 0:
+        # Fix for astropy Table filtering - use proper indexing
+        for strategy_name, filter_func in [
+            ("LC products", lambda p: p['productSubGroupDescription'] == 'LC'),
+            ("lightcurve products", lambda p: 'lightcurve' in str(p.get('productSubGroupDescription', '')).lower()),
+            ("LC filename products", lambda p: 'lc' in str(p.get('productFilename', '')).lower()),
+            ("SCIENCE products", lambda p: p.get('productType', '') == 'SCIENCE'),
+        ]:
+            try:
+                # Use list comprehension with proper indexing for astropy Table
+                filtered_indices = []
+                for i, row in enumerate(products):
+                    try:
+                        if filter_func(row):
+                            filtered_indices.append(i)
+                    except Exception:
+                        continue
+                
+                if filtered_indices:
+                    lc_products = products[filtered_indices]
+                    logger.info(f"Found {len(lc_products)} {strategy_name}")
+                    logger.info(f"Using {strategy_name} for download")
+                    break
+                else:
+                    logger.info(f"Found 0 {strategy_name}")
+                    
+            except Exception as e:
+                logger.warning(f"Product filtering strategy '{strategy_name}' failed: {e}")
+                continue
+        
+        if lc_products is None or len(lc_products) == 0:
+            # Log available product types for debugging
+            try:
+                unique_types = set(str(p.get('productSubGroupDescription', '')) for p in products)
+                unique_filenames = set(str(p.get('productFilename', '')).split('_')[0] for p in products)
+                logger.error(f"No lightcurve products found for {mission} {kep_id}. "
+                            f"Available product types: {list(unique_types)}, "
+                            f"Filename prefixes: {list(unique_filenames)}")
+            except Exception as e:
+                logger.error(f"Could not log product details: {e}")
             raise LightcurveError(f"No lightcurve products found for {mission} {kep_id}")
         
+        # Log lightcurve product details
+        for i, product in enumerate(lc_products[:3]):  # Log first 3 products
+            logger.info(f"LC Product {i}: "
+                       f"productFilename={product.get('productFilename', 'N/A')}, "
+                       f"size={product.get('size', 'N/A')}")
+        
         # Download first lightcurve file
+        logger.info(f"Downloading lightcurve product: {lc_products[0]['productFilename']}")
+        
         download_result = Observations.download_products(
             lc_products[0:1],
             download_dir="./cache/lightcurves"
         )
         
+        logger.info(f"Download completed. Result: {len(download_result)} files")
+        
         if len(download_result) == 0:
+            logger.error(f"Failed to download {mission} lightcurve for {kep_id}")
             raise LightcurveError(f"Failed to download {mission} lightcurve for {kep_id}")
         
         # Process downloaded FITS file
         fits_path = download_result['Local Path'][0]
+        logger.info(f"Processing FITS file: {fits_path}")
+        
+        # Check if file exists and get size
+        if os.path.exists(fits_path):
+            file_size = os.path.getsize(fits_path)
+            logger.info(f"FITS file size: {file_size} bytes")
+        else:
+            logger.error(f"FITS file not found at path: {fits_path}")
+            raise LightcurveError(f"Downloaded FITS file not found: {fits_path}")
         
         with fits.open(fits_path) as hdul:
+            logger.info(f"FITS file has {len(hdul)} HDUs")
+            
+            if len(hdul) < 2:
+                logger.error(f"FITS file has insufficient HDUs: {len(hdul)}")
+                raise LightcurveError("Invalid FITS file structure")
+            
             data = hdul[1].data
             header = hdul[1].header
             
-            # Extract time and flux
+            logger.info(f"Data table has {len(data)} rows")
+            logger.info(f"Available columns: {list(data.columns.names)}")
+            
+            # Try multiple flux column strategies
+            flux_columns = ['PDCSAP_FLUX', 'SAP_FLUX', 'FLUX']
+            flux = None
+            flux_column_used = None
+            
+            for col in flux_columns:
+                if col in data.columns.names:
+                    flux = data[col]
+                    flux_column_used = col
+                    logger.info(f"Using flux column: {col}")
+                    break
+            
+            if flux is None:
+                logger.error(f"No suitable flux column found. Available columns: {list(data.columns.names)}")
+                raise LightcurveError("No suitable flux column found in FITS file")
+            
+            # Extract time
             time = data['TIME']
-            flux = data['PDCSAP_FLUX']  # Pre-search Data Conditioning flux
+            
+            logger.info(f"Raw data: {len(time)} time points, {len(flux)} flux points (column: {flux_column_used})")
             
             # Remove NaN values
             valid_mask = ~(np.isnan(time) | np.isnan(flux))
             time = time[valid_mask]
             flux = flux[valid_mask]
             
+            logger.info(f"After NaN filtering: {len(time)} valid points")
+            
             if len(time) == 0:
+                logger.error(f"No valid data points found after filtering for {mission} {kep_id}")
                 raise LightcurveError("No valid data points found")
             
             # Calculate statistics
@@ -294,10 +649,10 @@ def _download_kepler_sync(kep_id: int, mission: str) -> Dict[str, Any]:
             # Normalize flux
             flux_normalized = (flux - flux_median) / flux_median
             
-            logger.info(f"Processed {mission} lightcurve for {kep_id}: {len(time)} points")
+            logger.info(f"Successfully processed {mission} lightcurve for {kep_id} via astroquery: {len(time)} points")
             
             return {
-                "mission": mission.upper(),
+                "mission": mission,
                 "target_id": kep_id,
                 "data_points": len(time),
                 "time_range": {
@@ -318,11 +673,14 @@ def _download_kepler_sync(kep_id: int, mission: str) -> Dict[str, Any]:
                     "flux_normalized": flux_normalized[:1000].tolist()
                 },
                 "quarter": header.get('QUARTER', 'unknown'),
-                "campaign": header.get('CAMPAIGN', 'unknown')
+                "campaign": header.get('CAMPAIGN', 'unknown'),
+                "method": "astroquery",
+                "flux_column": flux_column_used,
+                "search_strategy": successful_strategy
             }
             
     except Exception as e:
-        logger.error(f"Error in sync {mission} download for {kep_id}: {e}")
+        logger.error(f"Error in astroquery download for {mission} {kep_id}: {e}")
         raise LightcurveError(f"Failed to download {mission} data: {e}")
 
 
