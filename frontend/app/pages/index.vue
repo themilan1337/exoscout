@@ -17,12 +17,21 @@
     <div class="relative z-10">
       <Header />
       <ScrambleText
-        :className="'max-w-3xl text-pretty mx-auto mt-24 leading-tight text-center font-medium text-[clamp(14px,4vw,32px)] text-zinc-100'"
+        :className="'max-w-5xl text-4xl text-pretty mx-auto mt-24 leading-tight text-center font-medium text-zinc-100'"
         :radius="100" :duration="1.2" :speed="0.5" scrambleChars=".:">
         Discover Exoplanets.<br>
         Your gateway to real data from NASA’s <br> archives—search, filter, and explore <br> worlds beyond our solar <br> system in seconds.
       </ScrambleText>
       <div class="flex flex-col sm:flex-row mx-auto justify-center items-center mt-8 gap-2 px-4">
+        <select
+          v-model="selectedMission"
+          class="bg-zinc-900 border border-zinc-700 rounded-md px-4 py-1 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[120px] text-sm"
+        >
+          <option value="">{{ isLoadingMissions ? 'Loading...' : 'Select Mission' }}</option>
+          <option v-for="mission in availableMissions" :key="mission" :value="mission">
+            {{ mission }}
+          </option>
+        </select>
         <Input 
           v-model="exoplanetId" 
           placeholder="Enter ID" 
@@ -36,7 +45,7 @@
           variant="secondary" 
           size="sm" 
           @click="searchExoplanet"
-          :disabled="!exoplanetId || exoplanetId.trim() === ''"
+          :disabled="!exoplanetId || exoplanetId.trim() === '' || !selectedMission"
           class="w-full sm:w-auto"
         >
           Find some planets
@@ -50,24 +59,72 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import Header from '@/components/layout/Header.vue'
 import ScrambleText from "@/components/ScrambleText.vue";
 import Button from "@/components/ui/Button.vue";
 import Input from "@/components/ui/Input.vue";
 import Particles from "@/components/Particles.vue";
+import { useExoScoutAPI } from '@/composables/useExoScoutAPI'
 
 const exoplanetId = ref('')
+const selectedMission = ref('')
+const availableMissions = ref<string[]>([])
+const isLoadingMissions = ref(false)
+
+const { getAvailableMissions, resolveTarget } = useExoScoutAPI()
+
+// Load available missions on component mount
+const loadAvailableMissions = async () => {
+  isLoadingMissions.value = true
+  try {
+    availableMissions.value = await getAvailableMissions()
+    // Set default mission to TESS if available
+    if (availableMissions.value.includes('TESS')) {
+      selectedMission.value = 'TESS'
+    } else if (availableMissions.value.length > 0) {
+      selectedMission.value = availableMissions.value[0]
+    }
+  } catch (err: any) {
+    console.error('Failed to load available missions:', err.message)
+  } finally {
+    isLoadingMissions.value = false
+  }
+}
 
 const searchExoplanet = async () => {
-  if (exoplanetId.value && exoplanetId.value.trim() !== '') {
-    //go to exoplanet letsgooooo!
+  if (exoplanetId.value && exoplanetId.value.trim() !== '' && selectedMission.value) {
+    // Navigate to dashboard with both mission and target ID
     await navigateTo({
       path: '/dashboard',
-      query: { id: exoplanetId.value.trim() }
+      query: { 
+        id: exoplanetId.value.trim(),
+        mission: selectedMission.value
+      }
     })
   }
 }
+
+// Watch for mission changes to potentially auto-resolve data
+watch(selectedMission, async (newMission) => {
+  if (newMission && exoplanetId.value && exoplanetId.value.trim() !== '') {
+    // Auto-resolve target data when both mission and ID are available
+    try {
+      const targetId = exoplanetId.value.trim()
+      if (targetId) {
+        const resolvedData = await resolveTarget(targetId)
+        console.log('Auto-resolved data:', resolvedData)
+      }
+    } catch (err) {
+      console.log('Auto-resolution failed, will proceed with manual search')
+    }
+  }
+})
+
+// Load missions on component mount
+onMounted(() => {
+  loadAvailableMissions()
+})
 </script>
 <style scoped>
 .particles-container {
