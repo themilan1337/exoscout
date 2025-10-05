@@ -135,3 +135,60 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-10-05 10:54:46,256 - main - INFO - Starting ExoScout Backend...
 2025-10-05 11:00:23,354 - main - INFO - Shutting down ExoScout Backend...
 2025-10-05 11:00:24,343 - main - INFO - Starting ExoScout Backend...
+2025-10-05 11:01:46,271 - main - INFO - Shutting down ExoScout Backend...
+2025-10-05 11:02:01,313 - main - INFO - Starting ExoScout Backend...
+2025-10-05 11:02:39,632 - routers.lightcurve - INFO - Getting lightcurve for TESS 307210830
+2025-10-05 11:02:43,221 - httpx - INFO - HTTP Request: GET https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=%0A++++++++++++SELECT+tid%2C+ra%2C+dec%2C+st_pmra%2C+st_pmdec%2C+st_tmag%0A++++++++++++FROM+toi+%0A++++++++++++WHERE+tid+%3D+307210830%0A++++++++++++&format=json "HTTP/1.1 200 OK"
+2025-10-05 11:02:43,353 - services.nasa_api - INFO - NASA TAP query returned 3 results
+2025-10-05 11:02:43,358 - routers.lightcurve - INFO - Downloading TESS lightcurve for TIC 307210830 at 124.53286,-68.314466
+2025-10-05 11:03:30,490 - httpx - INFO - HTTP Request: GET https://mast.stsci.edu/tesscut/api/v0.1/astrocut?ra=124.53286&dec=-68.314466&y=5&x=5&units=px&format=fits "HTTP/1.1 303 See Other"
+2025-10-05 11:03:30,492 - routers.lightcurve - ERROR - HTTP error downloading TESS lightcurve for TIC 307210830: Redirect response '303 See Other' for url 'https://mast.stsci.edu/tesscut/api/v0.1/astrocut?ra=124.53286&dec=-68.314466&y=5&x=5&units=px&format=fits'
+Redirect location: 'https://stpubdata.s3.amazonaws.com/tess/public/staged_cutouts/Wl-ld2HV2Rrl0dyT/astrocut_124.53286_-68.314466_5.0x5.0px.zip'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/303
+2025-10-05 11:03:30,492 - routers.lightcurve - ERROR - Failed to get TESS lightcurve for 307210830: Failed to download TESS lightcurve: Redirect response '303 See Other' for url 'https://mast.stsci.edu/tesscut/api/v0.1/astrocut?ra=124.53286&dec=-68.314466&y=5&x=5&units=px&format=fits'
+Redirect location: 'https://stpubdata.s3.amazonaws.com/tess/public/staged_cutouts/Wl-ld2HV2Rrl0dyT/astrocut_124.53286_-68.314466_5.0x5.0px.zip'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/303
+2025-10-05 11:03:30,492 - utils.cache - ERROR - Function execution error: 500: Failed to retrieve TESS lightcurve: Failed to download TESS lightcurve: Redirect response '303 See Other' for url 'https://mast.stsci.edu/tesscut/api/v0.1/astrocut?ra=124.53286&dec=-68.314466&y=5&x=5&units=px&format=fits'
+Redirect location: 'https://stpubdata.s3.amazonaws.com/tess/public/staged_cutouts/Wl-ld2HV2Rrl0dyT/astrocut_124.53286_-68.314466_5.0x5.0px.zip'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/303
+2025-10-05 11:03:43,284 - routers.lightcurve - INFO - Getting lightcurve for TESS 307210830
+2025-10-05 11:03:43,284 - routers.lightcurve - INFO - Downloading TESS lightcurve for TIC 307210830 at 124.53286,-68.314466
+2025-10-05 11:04:16,726 - httpx - INFO - HTTP Request: GET https://mast.stsci.edu/tesscut/api/v0.1/astrocut?ra=124.53286&dec=-68.314466&y=5&x=5&units=px&format=fits "HTTP/1.1 303 See Other"
+2025-10-05 11:04:16,727 - routers.lightcurve - ERROR - HTTP error downloading TESS lightcurve for TIC 307210830: Redirect response '303 See Other' for url 'https://mast.stsci.edu/tesscut/api/v0.1/astrocut?ra=124.53286&dec=-68.314466&y=5&x=5&units=px&format=fits'
+Redirect location: 'https://stpubdata.s3.amazonaws.com/tess/public/staged_cutouts/iyf1hdvzVvsThoMp/astrocut_124.53286_-68.314466_5.0x5.0px.zip'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/303
+2025-10-05 11:04:16,728 - routers.lightcurve - ERROR - Failed to get TESS lightcurve for 307210830: Failed to download TESS lightcurve: Redirect response '303 See Other' for url 'https://mast.stsci.edu/tesscut/api/v0.1/astrocut?ra=124.53286&dec=-68.314466&y=5&x=5&units=px&format=fits'
+Redirect location: 'https://stpubdata.s3.amazonaws.com/tess/public/staged_cutouts/iyf1hdvzVvsThoMp/astrocut_124.53286_-68.314466_5.0x5.0px.zip'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/303
+2025-10-05 11:04:16,728 - utils.cache - ERROR - Function execution error: 500: Failed to retrieve TESS lightcurve: Failed to download TESS lightcurve: Redirect response '303 See Other' for url 'https://mast.stsci.edu/tesscut/api/v0.1/astrocut?ra=124.53286&dec=-68.314466&y=5&x=5&units=px&format=fits'
+Redirect location: 'https://stpubdata.s3.amazonaws.com/tess/public/staged_cutouts/iyf1hdvzVvsThoMp/astrocut_124.53286_-68.314466_5.0x5.0px.zip'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/303
+2025-10-05 11:04:59,713 - main - INFO - Shutting down ExoScout Backend...
+2025-10-05 11:05:00,610 - main - INFO - Starting ExoScout Backend...
+2025-10-05 11:05:01,149 - main - INFO - Starting ExoScout Backend...
+2025-10-05 11:05:23,559 - routers.lightcurve - INFO - Getting lightcurve for TESS 307210830
+2025-10-05 11:05:23,559 - routers.lightcurve - INFO - Downloading TESS lightcurve for TIC 307210830 at 124.53286,-68.314466
+2025-10-05 11:06:02,189 - httpx - INFO - HTTP Request: GET https://mast.stsci.edu/tesscut/api/v0.1/astrocut?ra=124.53286&dec=-68.314466&y=5&x=5&units=px&format=fits "HTTP/1.1 303 See Other"
+2025-10-05 11:06:02,882 - httpx - INFO - HTTP Request: GET https://stpubdata.s3.amazonaws.com/tess/public/staged_cutouts/EC-YDEyGCRMER5ih/astrocut_124.53286_-68.314466_5.0x5.0px.zip "HTTP/1.1 200 OK"
+2025-10-05 11:06:19,231 - routers.lightcurve - ERROR - Error processing TESS FITS data for TIC 307210830: No SIMPLE card found, this file does not appear to be a valid FITS file. If this is really a FITS file, try with ignore_missing_simple=True
+2025-10-05 11:06:19,232 - routers.lightcurve - ERROR - Error downloading TESS lightcurve for TIC 307210830: Failed to process FITS data: No SIMPLE card found, this file does not appear to be a valid FITS file. If this is really a FITS file, try with ignore_missing_simple=True
+2025-10-05 11:06:19,232 - routers.lightcurve - ERROR - Failed to get TESS lightcurve for 307210830: Failed to process TESS lightcurve: Failed to process FITS data: No SIMPLE card found, this file does not appear to be a valid FITS file. If this is really a FITS file, try with ignore_missing_simple=True
+2025-10-05 11:06:19,232 - utils.cache - ERROR - Function execution error: 500: Failed to retrieve TESS lightcurve: Failed to process TESS lightcurve: Failed to process FITS data: No SIMPLE card found, this file does not appear to be a valid FITS file. If this is really a FITS file, try with ignore_missing_simple=True
+2025-10-05 11:06:40,637 - main - INFO - Shutting down ExoScout Backend...
+2025-10-05 11:06:41,585 - main - INFO - Starting ExoScout Backend...
+2025-10-05 11:06:42,116 - main - INFO - Starting ExoScout Backend...
+2025-10-05 11:07:05,946 - routers.lightcurve - INFO - Getting lightcurve for TESS 307210830
+2025-10-05 11:07:05,946 - routers.lightcurve - INFO - Downloading TESS lightcurve for TIC 307210830 at 124.53286,-68.314466
+2025-10-05 11:07:46,014 - httpx - INFO - HTTP Request: GET https://mast.stsci.edu/tesscut/api/v0.1/astrocut?ra=124.53286&dec=-68.314466&y=5&x=5&units=px&format=fits "HTTP/1.1 303 See Other"
+2025-10-05 11:07:46,685 - httpx - INFO - HTTP Request: GET https://stpubdata.s3.amazonaws.com/tess/public/staged_cutouts/0mfqbr2uk9hYS8fL/astrocut_124.53286_-68.314466_5.0x5.0px.zip "HTTP/1.1 200 OK"
+2025-10-05 11:08:03,498 - routers.lightcurve - ERROR - Error processing TESS FITS data for TIC 307210830: operands could not be broadcast together with shapes (1282,) (1282,5,5) 
+2025-10-05 11:08:03,498 - routers.lightcurve - ERROR - Error downloading TESS lightcurve for TIC 307210830: Failed to process FITS data: operands could not be broadcast together with shapes (1282,) (1282,5,5) 
+2025-10-05 11:08:03,498 - routers.lightcurve - ERROR - Failed to get TESS lightcurve for 307210830: Failed to process TESS lightcurve: Failed to process FITS data: operands could not be broadcast together with shapes (1282,) (1282,5,5) 
+2025-10-05 11:08:03,498 - utils.cache - ERROR - Function execution error: 500: Failed to retrieve TESS lightcurve: Failed to process TESS lightcurve: Failed to process FITS data: operands could not be broadcast together with shapes (1282,) (1282,5,5) 
+2025-10-05 11:08:18,748 - main - INFO - Shutting down ExoScout Backend...
+2025-10-05 11:08:19,613 - main - INFO - Starting ExoScout Backend...
+2025-10-05 11:08:32,168 - routers.lightcurve - INFO - Getting lightcurve for TESS 307210830
+2025-10-05 11:08:32,168 - routers.lightcurve - INFO - Downloading TESS lightcurve for TIC 307210830 at 124.53286,-68.314466
+2025-10-05 11:09:10,864 - httpx - INFO - HTTP Request: GET https://mast.stsci.edu/tesscut/api/v0.1/astrocut?ra=124.53286&dec=-68.314466&y=5&x=5&units=px&format=fits "HTTP/1.1 303 See Other"
+2025-10-05 11:09:11,642 - httpx - INFO - HTTP Request: GET https://stpubdata.s3.amazonaws.com/tess/public/staged_cutouts/TRRcMNk75y1qk2dv/astrocut_124.53286_-68.314466_5.0x5.0px.zip "HTTP/1.1 200 OK"
+2025-10-05 11:09:28,064 - routers.lightcurve - INFO - Processed TESS lightcurve for TIC 307210830: 1282 points
