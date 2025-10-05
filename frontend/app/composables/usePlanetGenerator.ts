@@ -188,10 +188,47 @@ export function usePlanetGenerator() {
     return new THREE.Mesh(geometry, material)
   }
 
+  // Create animated stars background
+  const createStarsBackground = (count: number = 2000): THREE.Points => {
+    const starsGeometry = new THREE.BufferGeometry()
+    const starPositions = new Float32Array(count * 3)
+    const starSizes = new Float32Array(count)
+    
+    // Generate random star positions and sizes
+    for (let i = 0; i < count; i++) {
+      const i3 = i * 3
+      // Create stars in a large sphere around the scene
+      starPositions[i3] = (Math.random() - 0.5) * 2000
+      starPositions[i3 + 1] = (Math.random() - 0.5) * 2000
+      starPositions[i3 + 2] = (Math.random() - 0.5) * 2000
+      
+      // Vary star sizes for more realistic look
+      starSizes[i] = Math.random() * 2 + 0.5
+    }
+    
+    starsGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3))
+    starsGeometry.setAttribute('size', new THREE.BufferAttribute(starSizes, 1))
+    
+    // Create star material with size attenuation
+    const starsMaterial = new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: 2,
+      sizeAttenuation: true,
+      transparent: true,
+      opacity: 0.8
+    })
+    
+    return new THREE.Points(starsGeometry, starsMaterial)
+  }
+
   // Setup Three.js scene for planet display - optimized for performance
   const setupPlanetScene = (container: HTMLElement, planet: THREE.Mesh) => {
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color(0x000000)
+    scene.background = new THREE.Color(0x000000) // Very dark blue instead of pure black
+    
+    // Add animated stars background
+    const stars = createStarsBackground(1500)
+    scene.add(stars)
 
     const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000)
     camera.position.z = 50
@@ -223,6 +260,79 @@ export function usePlanetGenerator() {
 
     scene.add(planet)
 
+    // Mouse interaction variables
+    let isMouseDown = false
+    let mouseX = 0
+    let mouseY = 0
+    let targetRotationX = 0
+    let targetRotationY = 0
+    let currentRotationX = 0
+    let currentRotationY = 0
+
+    // Raycaster for detecting planet hover
+    const raycaster = new THREE.Raycaster()
+    const mouse = new THREE.Vector2()
+
+    // Mouse event handlers for planet interaction
+    const handleMouseDown = (event: MouseEvent) => {
+      isMouseDown = true
+      mouseX = event.clientX
+      mouseY = event.clientY
+      renderer.domElement.style.cursor = 'grabbing'
+    }
+
+    const handleMouseMove = (event: MouseEvent) => {
+      // Update mouse position for raycasting
+      const rect = renderer.domElement.getBoundingClientRect()
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1
+
+      // Check if hovering over planet when not dragging
+      if (!isMouseDown) {
+        raycaster.setFromCamera(mouse, camera)
+        const intersects = raycaster.intersectObject(planet)
+        
+        if (intersects.length > 0) {
+          renderer.domElement.style.cursor = 'grab'
+        } else {
+          renderer.domElement.style.cursor = 'default'
+        }
+        return
+      }
+      
+      const deltaX = event.clientX - mouseX
+      const deltaY = event.clientY - mouseY
+      
+      targetRotationY += deltaX * 0.01
+      targetRotationX += deltaY * 0.01
+      
+      // Clamp vertical rotation to prevent flipping
+      targetRotationX = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, targetRotationX))
+      
+      mouseX = event.clientX
+      mouseY = event.clientY
+    }
+
+    const handleMouseUp = () => {
+      isMouseDown = false
+      // Check if still hovering over planet after mouse up
+      raycaster.setFromCamera(mouse, camera)
+      const intersects = raycaster.intersectObject(planet)
+      renderer.domElement.style.cursor = intersects.length > 0 ? 'grab' : 'default'
+    }
+
+    const handleWheel = (event: WheelEvent) => {
+      event.preventDefault()
+      camera.position.z += event.deltaY * 0.01
+      camera.position.z = Math.max(25, Math.min(100, camera.position.z)) // Clamp zoom
+    }
+
+    // Add event listeners
+    renderer.domElement.addEventListener('mousedown', handleMouseDown)
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseup', handleMouseUp)
+    renderer.domElement.addEventListener('wheel', handleWheel)
+
     // Performance optimized animation loop
     let animationId: number
     let lastTime = 0
@@ -234,7 +344,22 @@ export function usePlanetGenerator() {
       
       // Throttle to target FPS for consistent performance
       if (currentTime - lastTime >= frameInterval) {
-        planet.rotation.y += 0.002 // Slower rotation for smoother performance
+        // Smooth rotation interpolation
+        currentRotationX += (targetRotationX - currentRotationX) * 0.1
+        currentRotationY += (targetRotationY - currentRotationY) * 0.1
+        
+        planet.rotation.x = currentRotationX
+        planet.rotation.y = currentRotationY
+        
+        // Auto-rotate when not interacting
+        if (!isMouseDown) {
+          targetRotationY += 0.002
+        }
+        
+        // Animate stars - slow rotation for depth effect
+        stars.rotation.x += 0.0001
+        stars.rotation.y += 0.0002
+        
         renderer.render(scene, camera)
         lastTime = currentTime
       }
@@ -261,6 +386,12 @@ export function usePlanetGenerator() {
       window.removeEventListener('resize', handleResize)
       clearTimeout(resizeTimeout)
       
+      // Remove mouse event listeners
+      renderer.domElement.removeEventListener('mousedown', handleMouseDown)
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+      renderer.domElement.removeEventListener('wheel', handleWheel)
+      
       // Proper cleanup to prevent memory leaks
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement)
@@ -270,6 +401,12 @@ export function usePlanetGenerator() {
       planet.geometry.dispose()
       if (planet.material instanceof THREE.Material) {
         planet.material.dispose()
+      }
+      
+      // Dispose stars
+      stars.geometry.dispose()
+      if (stars.material instanceof THREE.Material) {
+        stars.material.dispose()
       }
       
       renderer.dispose()
